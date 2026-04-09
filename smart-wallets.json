@@ -1,6 +1,198 @@
 {
   "wallets": [
     {
+      "name": "LP Agent Smart LP #1",
+      "address": "3MrM6bC8R4xQwtZp4mPXXjYd843jSYD73AHamyNwQVvz",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.9,
+        "pnl30d": 19.67,
+        "pnl7d": 4.29,
+        "totalLp": 127,
+        "avgAgeHour": 18.6,
+        "totalFeeNative": 54.75
+      },
+      "note": "90% win rate, highest PnL 30d. Best performer."
+    },
+    {
+      "name": "LP Agent Smart LP #10",
+      "address": "A2yFVDJvB6jCU8Z96SFRZFNA5Kje7WimXvfGwyLsQgKP",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.822,
+        "pnl30d": 0.33,
+        "pnl7d": 0.42,
+        "totalLp": 958,
+        "avgAgeHour": 0.3,
+        "totalFeeNative": 38.67
+      },
+      "note": "Lower win rate but positive. Fast turn trades."
+    },
+    {
+      "name": "LP Agent Smart LP #11",
+      "address": "3TXwWEwRUAHitwn8agS7pttqRvY6qrftn13ZuEceMfFM",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.835,
+        "pnl30d": 16.68,
+        "pnl7d": 6.62,
+        "totalLp": 505,
+        "avgAgeHour": 1.9,
+        "totalFeeNative": 219.85
+      },
+      "note": "Highest fee earner (219 SOL). Strong 7d PnL."
+    },
+    {
+      "name": "LP Agent Smart LP #12",
+      "address": "ANVUFaKB2CagiA2BdawCbtf3g54R8YgzzXD32xRrduT2",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.857,
+        "pnl30d": 1.85,
+        "pnl7d": 1.85,
+        "totalLp": 359,
+        "avgAgeHour": 0.1,
+        "totalFeeNative": 31.94
+      },
+      "note": "Consistent performer. 7d = 30d PnL (stable)."
+    },
+    {
+      "name": "LP Agent Smart LP #2",
+      "address": "GgpU7afhLUWBBwr4YRiQYfwnwCfVia9LKMQdiFYNN96e",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.837,
+        "pnl30d": 3.25,
+        "pnl7d": 0.04,
+        "totalLp": 2382,
+        "avgAgeHour": 2.5,
+        "totalFeeNative": 145.29
+      },
+      "note": "High volume LP, 2382 positions. Good consistent performer."
+    },
+    {
+      "name": "LP Agent Smart LP #3",
+      "address": "DH59YdRqfS5kE1NXYcyvXf1UKK1evHgUsmB2bGBtQdi1",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.839,
+        "pnl30d": 18.97,
+        "pnl7d": 1.88,
+        "totalLp": 364,
+        "avgAgeHour": 0.03,
+        "totalFeeNative": 58.73
+      },
+      "note": "Fast turn trades (0.03h avg). 83.9% win rate, strong PnL."
+    },
+    {
+      "name": "LP Agent Smart LP #4",
+      "address": "7uf8CtzGjnrscicveuWt88KfSKcM9nuVoKJbp9qonh1w",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.86,
+        "pnl30d": 6.28,
+        "pnl7d": 1.56,
+        "totalLp": 488,
+        "avgAgeHour": 2.9,
+        "totalFeeNative": 74.96
+      },
+      "note": "86% win rate, solid PnL. Good all-around."
+    },
+    {
+      "name": "LP Agent Smart LP #5",
+      "address": "7BezLmjJUzw1KdLsjsDu5EjUa9qUikrUkpUt2aUoRnwr",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.882,
+        "pnl30d": -0.89,
+        "pnl7d": 0.35,
+        "totalLp": 874,
+        "avgAgeHour": 1.5,
+        "totalFeeNative": 121.56
+      },
+      "note": "88.2% win rate but negative 30d PnL. Recovering."
+    },
+    {
+      "name": "LP Agent Smart LP #6",
+      "address": "62ZSNw4khuoxp7PoLhiB7Q9ajH9SSsUJJUJKNoJZpGSF",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.831,
+        "pnl30d": -0.15,
+        "pnl7d": 1.08,
+        "totalLp": 3304,
+        "avgAgeHour": 0.6,
+        "totalFeeNative": 112.23
+      },
+      "note": "High volume LP (3304 trades). 7d recovery strong."
+    },
+    {
+      "name": "LP Agent Smart LP #7",
+      "address": "GkFKcymcic9ZkJBygdiH8UTiKGABiPAy3URhWB2PtHZu",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.857,
+        "pnl30d": -0.66,
+        "pnl7d": 0.9,
+        "totalLp": 3799,
+        "avgAgeHour": 2.9,
+        "totalFeeNative": 174.6
+      },
+      "note": "Largest LP by count (3799). High fees earned."
+    },
+    {
+      "name": "LP Agent Smart LP #8",
+      "address": "BhMSMvtd8dP75WdUajYBDqpQyb2VAwbsMRrg1EUeY9cE",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.886,
+        "pnl30d": 0.48,
+        "pnl7d": 3.31,
+        "totalLp": 2071,
+        "avgAgeHour": 0.4,
+        "totalFeeNative": 165.33
+      },
+      "note": "88.6% win rate, strong 7d PnL. Fast turnover."
+    },
+    {
+      "name": "LP Agent Smart LP #9",
+      "address": "HgfAwZ1awtiqQaM1Kk1qUGmiXoHfyYB8MpSvjs7t63gV",
+      "category": "alpha",
+      "type": "lp",
+      "addedAt": "2026-04-08T18:49:00.000Z",
+      "stats": {
+        "winRate": 0.903,
+        "pnl30d": 10.21,
+        "pnl7d": 1.21,
+        "totalLp": 5213,
+        "avgAgeHour": 0.7,
+        "totalFeeNative": 182.14
+      },
+      "note": "Highest win rate 90.3%. 5213 trades. Top performer."
+    },
+    {
       "name": "SmartWallet #1",
       "address": "HTVQ7B7yhwkorAdfzaoqd5oVrjL4tWVo8Crb6C2nKCqa",
       "category": "lp",
@@ -9,72 +201,32 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "SmartWallet #2",
-      "address": "BzaeLdLk7nyBTLYjgUAuYeqmh6QrwP66Wbeg47Fk6tG8",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #3",
-      "address": "7DeCm4PJMBUAUTU7ftVPvmcBpvERBRVXxBUJSHCvtir6",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #4",
-      "address": "7qGmrXBgPyzYJAGeeASePVon77ia4vgGPDWuJbKAR3bu",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #5",
-      "address": "4a9xmr8WBcLGZjWWhpsQyJqwqjDoYQpnTGigxG4rueuP",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #6",
-      "address": "BLEEQi8dvZZdBvgTxKfrb5R2abJJdPC5pSuxca5FN32y",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #7",
-      "address": "3hSmFSEYV6P2oiFss2MruMG3TwgAxsanUgAKdmFjWtRT",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #8",
-      "address": "Hsth9PdnPbfAU2cebZ1xBkMVj6zRKW3tNuzSv6cwLoAw",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #9",
-      "address": "95dZXbEmKUfutjR37JxQdVMvz5tbhCHADtFSUUjPwfcE",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
       "name": "SmartWallet #10",
       "address": "9kuQBjyfo7Gz1b6HAYwP5jCoCygX3uY3ms12qHscwdn",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
+      "name": "SmartWallet #100",
+      "address": "7aTh1tyHd99dPAF6uJBqkCesanEfhj4vW8X3D2HRsAgB",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
+      "name": "SmartWallet #101",
+      "address": "HjcE49Mo9ZsULuKEooytgbQteBZBknP58dXiaCRoSNqp",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
+      "name": "SmartWallet #102",
+      "address": "5sxkZ5LoKV1qLU2vTkEL3zBoj7rx1qdGaJNxYnzrbEQs",
       "category": "lp",
       "type": "lp",
       "addedAt": "2026-04-09T08:17:34.816Z",
@@ -147,6 +299,14 @@
     {
       "name": "SmartWallet #19",
       "address": "FHpuVFpidv5YwJVdv7QV2YdZpdbhkdcF9FSCf6qD95ft",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
+      "name": "SmartWallet #2",
+      "address": "BzaeLdLk7nyBTLYjgUAuYeqmh6QrwP66Wbeg47Fk6tG8",
       "category": "lp",
       "type": "lp",
       "addedAt": "2026-04-09T08:17:34.816Z",
@@ -233,6 +393,14 @@
       "note": "Extracted from LP Agent list"
     },
     {
+      "name": "SmartWallet #3",
+      "address": "7DeCm4PJMBUAUTU7ftVPvmcBpvERBRVXxBUJSHCvtir6",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
       "name": "SmartWallet #30",
       "address": "GMpK1uqaTpFEyeSL8kz1F44zzASbB6enVAqL9i285gCD",
       "category": "lp",
@@ -307,6 +475,14 @@
     {
       "name": "SmartWallet #39",
       "address": "BfNg4XWhWgytg2Yfc5MMmSq7hDEZubz8ynQGwAUvb7hH",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
+      "name": "SmartWallet #4",
+      "address": "7qGmrXBgPyzYJAGeeASePVon77ia4vgGPDWuJbKAR3bu",
       "category": "lp",
       "type": "lp",
       "addedAt": "2026-04-09T08:17:34.816Z",
@@ -393,6 +569,14 @@
       "note": "Extracted from LP Agent list"
     },
     {
+      "name": "SmartWallet #5",
+      "address": "4a9xmr8WBcLGZjWWhpsQyJqwqjDoYQpnTGigxG4rueuP",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
       "name": "SmartWallet #50",
       "address": "BrcaZkXPEVPb7P3rsgQL6Eh2Kt4LsJMGwEKNgtv7FLeF",
       "category": "lp",
@@ -467,6 +651,14 @@
     {
       "name": "SmartWallet #59",
       "address": "BMABCZzPJjsd4DjAvY6dQ6y5pbwxynKehJv7SsvLbfnM",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
+      "name": "SmartWallet #6",
+      "address": "BLEEQi8dvZZdBvgTxKfrb5R2abJJdPC5pSuxca5FN32y",
       "category": "lp",
       "type": "lp",
       "addedAt": "2026-04-09T08:17:34.816Z",
@@ -553,6 +745,14 @@
       "note": "Extracted from LP Agent list"
     },
     {
+      "name": "SmartWallet #7",
+      "address": "3hSmFSEYV6P2oiFss2MruMG3TwgAxsanUgAKdmFjWtRT",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
       "name": "SmartWallet #70",
       "address": "2DiUnnkyET1m2rnsiwiqowV3gzvvJ62ED8nMBy3SxjBG",
       "category": "lp",
@@ -577,14 +777,6 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "SmartWallet #73",
-      "address": "HgfAwZ1awtiqQaM1Kk1qUGmiXoHfyYB8MpSvjs7t63gV",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
       "name": "SmartWallet #74",
       "address": "7dtruexcpjMAyq1JYeRpgbXR86rnKMXq4TeRJ1Q1LPQU",
       "category": "lp",
@@ -595,14 +787,6 @@
     {
       "name": "SmartWallet #75",
       "address": "BTRieMA4pQhazse9462Uk94h2bwhaaqDFWpqQG3YDEud",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #76",
-      "address": "GgpU7afhLUWBBwr4YRiQYfwnwCfVia9LKMQdiFYNN96e",
       "category": "lp",
       "type": "lp",
       "addedAt": "2026-04-09T08:17:34.816Z",
@@ -627,6 +811,14 @@
     {
       "name": "SmartWallet #79",
       "address": "9ZhBVQSf4Ki7ygh5jLyirJVsq4fBHgMiCcGZKe4fgWak",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
+      "name": "SmartWallet #8",
+      "address": "Hsth9PdnPbfAU2cebZ1xBkMVj6zRKW3tNuzSv6cwLoAw",
       "category": "lp",
       "type": "lp",
       "addedAt": "2026-04-09T08:17:34.816Z",
@@ -713,6 +905,14 @@
       "note": "Extracted from LP Agent list"
     },
     {
+      "name": "SmartWallet #9",
+      "address": "95dZXbEmKUfutjR37JxQdVMvz5tbhCHADtFSUUjPwfcE",
+      "category": "lp",
+      "type": "lp",
+      "addedAt": "2026-04-09T08:17:34.816Z",
+      "note": "Extracted from LP Agent list"
+    },
+    {
       "name": "SmartWallet #90",
       "address": "22ex2XMg4KmEXYywu7eqwmvKrpM6Vui3AsrDZJkxgU9g",
       "category": "lp",
@@ -787,30 +987,6 @@
     {
       "name": "SmartWallet #99",
       "address": "2X8UWP8UBx3edRRo55veJaf554yZ3ezvdbB141qrbPA3",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #100",
-      "address": "7aTh1tyHd99dPAF6uJBqkCesanEfhj4vW8X3D2HRsAgB",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #101",
-      "address": "HjcE49Mo9ZsULuKEooytgbQteBZBknP58dXiaCRoSNqp",
-      "category": "lp",
-      "type": "lp",
-      "addedAt": "2026-04-09T08:17:34.816Z",
-      "note": "Extracted from LP Agent list"
-    },
-    {
-      "name": "SmartWallet #102",
-      "address": "5sxkZ5LoKV1qLU2vTkEL3zBoj7rx1qdGaJNxYnzrbEQs",
       "category": "lp",
       "type": "lp",
       "addedAt": "2026-04-09T08:17:34.816Z",
