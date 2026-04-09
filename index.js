@@ -14,12 +14,25 @@ import { generateBriefing } from "./briefing.js";
 import { getLastBriefingDate, setLastBriefingDate, getTrackedPosition, setPositionInstruction, updatePnlAndCheckExits, queuePeakConfirmation, resolvePendingPeak, queueTrailingDropConfirmation, resolvePendingTrailingDrop } from "./state.js";
 import { getActiveStrategy } from "./strategy-library.js";
 import { recordPositionSnapshot, recallForPool, addPoolNote } from "./pool-memory.js";
+import { stageSignals, getAndClearStagedSignals, getStagedPools } from "./signal-tracker.js";
+import { loadWeights, saveWeights, recalculateWeights, scoreSignalSnapshot, getWeightsSummary } from "./signal-weights.js";
 import { checkSmartWalletsOnPool } from "./smart-wallets.js";
 import { getTokenNarrative, getTokenInfo } from "./tools/token.js";
 
 log("startup", "DLMM LP Agent starting...");
 log("startup", `Mode: ${process.env.DRY_RUN === "false" ? "LIVE" : "DRY RUN"}`);
 log("startup", `Model: ${process.env.LLM_MODEL || "hermes-3-405b"}`);
+
+// Load Darwinian signal weights
+let _signalWeights = null;
+try {
+  _signalWeights = loadWeights();
+  console.log(`[startup] Signal weights loaded: ${Object.keys(_signalWeights.weights || {}).length} signals`);
+} catch(e) {
+  console.log(`[startup_warn] Could not load signal weights: ${e.message}`);
+  _signalWeights = { weights: {}, calibration: {} };
+}
+
 
 const TP_PCT = config.management.takeProfitFeePct;
 const DEPLOY = config.management.deployAmountSol;
@@ -272,6 +285,11 @@ export async function runManagementCycle({ silent = false } = {}) {
         actionMap.set(p.position, { action: "CLOSE", rule: 5, reason: "low yield" });
         continue;
       }
+      // Rule 6: position expiry — force close if held > 48h with minimal fees earned
+      if ((p.age_minutes ?? 0) >= 2880 && (p.unclaimed_fee_usd ?? 0) < 0.05 && (p.pnl_pct ?? 0) < 1) {
+        actionMap.set(p.position, { action: "CLOSE", rule: 6, reason: "position expired (48h+ no fee)" });
+        continue;
+      }
       // Claim rule
       if ((p.unclaimed_fees_usd ?? 0) >= config.management.minClaimAmount) {
         actionMap.set(p.position, { action: "CLAIM" });
@@ -387,6 +405,18 @@ export async function runScreeningCycle({ silent = false } = {}) {
   _screeningBusy = true; // set immediately — prevents TOCTOU race with concurrent callers
   _screeningLastTriggered = Date.now();
 
+  // ── Screening cycle timeout (20min) ─────────────────────────────────
+  const SCREEN_TIMEOUT_MS = 20 * 60 * 1000;
+  let _screenAborted = false;
+  const screenTimeoutHandle = setTimeout(() => {
+    if (_screeningBusy) {
+      log("cron_error", `Screening timeout after ${SCREEN_TIMEOUT_MS / 60000}min — aborting`);
+      _screeningBusy = false;
+      _screenAborted = true;
+    }
+  }, SCREEN_TIMEOUT_MS);
+
+
   // Hard guards — don't even run the agent if preconditions aren't met
   let prePositions, preBalance;
   let liveMessage = null;
@@ -397,8 +427,10 @@ export async function runScreeningCycle({ silent = false } = {}) {
       log("cron", `Screening skipped — max positions reached (${prePositions.total_positions}/${config.risk.maxPositions})`);
       screenReport = `Screening skipped — max positions reached (${prePositions.total_positions}/${config.risk.maxPositions}).`;
       _screeningBusy = false;
+      clearTimeout(screenTimeoutHandle);
       return screenReport;
     }
+
     const minRequired = config.management.deployAmountSol + config.management.gasReserve;
     const isDryRun = process.env.DRY_RUN !== "false";
     if (!isDryRun && preBalance.sol < minRequired) {
@@ -411,6 +443,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
     log("cron_error", `Screening pre-check failed: ${e.message}`);
     screenReport = `Screening pre-check failed: ${e.message}`;
     _screeningBusy = false;
+    clearTimeout(screenTimeoutHandle);
     return screenReport;
   }
   if (!silent && telegramEnabled()) {
@@ -450,6 +483,25 @@ export async function runScreeningCycle({ silent = false } = {}) {
         ti: tokenInfo.status === "fulfilled" ? tokenInfo.value?.results?.[0] : null,
         mem: recallForPool(pool.pool),
       });
+      // Stage signals for Darwinian weighting
+      const stagedSignals = {
+        organic_score: pool.organic_score,
+        fee_tvl_ratio: pool.fee_active_tvl_ratio,
+        volume: pool.volume_5min,
+        mcap: pool.mcap,
+        holder_count: ti?.holders ?? null,
+        smart_wallets_present: (smartWallets.status === "fulfilled" && smartWallets.value?.in_pool?.length > 0) ? 1 : 0,
+        narrative_quality: narrative.status === "fulfilled" ? 1 : 0,
+        study_win_rate: null,
+        hive_consensus: null,
+        volatility: pool.volatility,
+        ath_proximity: pool.price_vs_ath_pct,
+        volume_trend: null,
+        okx_signal_present: (pool.smart_money_buy || pool.kol_in_clusters) ? 1 : 0,
+        change_1h: ti?.stats_1h?.price_change ?? null,
+        candle_price_range: null,
+      };
+      stageSignals(pool.pool, stagedSignals, mint);
       await new Promise(r => setTimeout(r, 150)); // avoid 429s
     }
 
@@ -543,15 +595,19 @@ export async function runScreeningCycle({ silent = false } = {}) {
       return block;
     });
 
-    // Get study learnings from past trades to inform strategy selection
+    // Get study learnings and signal weights
     const studyLearnings = getLessonsForPrompt({ agentType: "SCREENER", maxLessons: 5 });
     const studyBlock = studyLearnings
       ? `\n── PRIOR TRADE STUDIES (learn from past deployments) ──\n${studyLearnings}\n`
       : "";
+    const weightsSummary = _signalWeights?.weights ? getWeightsSummary(_signalWeights) : null;
+    const signalBlock = weightsSummary
+      ? `\n── SIGNAL WEIGHTS (prioritized screening signals) ──\n${weightsSummary}\n`
+      : "";
 
     const { content } = await agentLoop(`
 SCREENING CYCLE
-${strategyBlock}${studyBlock}
+${strategyBlock}${studyBlock}${signalBlock}
 Positions: ${prePositions.total_positions}/${config.risk.maxPositions} | SOL: ${currentBalance.sol.toFixed(3)} | Deploy: ${deployAmount} SOL
 
 PRE-LOADED CANDIDATES (${passing.length} pools):

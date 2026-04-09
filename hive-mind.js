@@ -1,23 +1,9 @@
 /**
- * Hive Mind — opt-in collective intelligence for meridian agents.
+ * Hive Mind integration — connects this meridian agent to a collective
+ * intelligence server so agents can share lessons, deploy outcomes,
+ * screening thresholds, and query consensus data.
  *
- * When enabled, agents share anonymized performance data (lessons, deploy
- * outcomes, screening thresholds) with a central server. In return, they
- * receive consensus wisdom from other agents — weighted by credibility
- * and freshness — to inform screening and management decisions.
- *
- * Setup:
- *   1. Run: node -e "import('./hive-mind.js').then(m => m.register('https://your-hive-url'))"
- *   2. Save the API key shown — it won't be shown again.
- *   3. Agent auto-syncs on each position close and queries during screening.
- *
- * Disable: clear hiveMindUrl and hiveMindApiKey in user-config.json.
- *
- * Privacy: NO wallet addresses or private keys are ever sent.
- *          Only pool addresses (public on-chain data), performance stats,
- *          and lessons are shared. Agent IDs are anonymous UUIDs.
- *
- * Zero dependencies — uses only Node.js stdlib + native fetch().
+ * Completely self-contained: only Node.js stdlib imports, no npm deps.
  */
 
 import fs from "fs";
@@ -28,12 +14,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const USER_CONFIG_PATH = path.join(__dirname, "user-config.json");
 const LESSONS_FILE = path.join(__dirname, "lessons.json");
 const POOL_MEMORY_FILE = path.join(__dirname, "pool-memory.json");
+const NUGGETS_DIR = path.join(__dirname, "data", "nuggets");
 
 const SYNC_DEBOUNCE_MS = 5 * 60 * 1000; // 5 minutes
 const GET_TIMEOUT_MS = 5_000;
 const POST_TIMEOUT_MS = 10_000;
-const MIN_AGENTS_FOR_CONSENSUS = 3;
-const MAX_CONSENSUS_CHARS = 500;
 
 let _lastSyncTime = 0;
 
@@ -65,22 +50,14 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = GET_TIMEOUT_MS) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    return await fetch(url, { ...options, signal: controller.signal });
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    return res;
   } finally {
     clearTimeout(timer);
   }
 }
 
 // ─── Public API ─────────────────────────────────────────────────
-
-/**
- * Check whether Hive Mind is configured and enabled.
- * @returns {boolean}
- */
-export function isEnabled() {
-  const cfg = readConfig();
-  return Boolean(cfg.hiveMindUrl && cfg.hiveMindApiKey);
-}
 
 /**
  * One-time registration with a Hive Mind server.
@@ -116,6 +93,7 @@ export async function register(url, registrationToken) {
   }
 
   const { agent_id, api_key } = await res.json();
+
   writeConfig({ hiveMindUrl: baseUrl, hiveMindApiKey: api_key, hiveMindAgentId: agent_id });
   console.log("[hive]", `Registered! agent_id=${agent_id}`);
   console.log("[hive]", `API key: ${api_key}`);
@@ -131,32 +109,38 @@ export async function register(url, registrationToken) {
 export async function syncToHive() {
   try {
     const cfg = readConfig();
-    if (!cfg.hiveMindUrl || !cfg.hiveMindApiKey) return;
+    if (!cfg.hiveMindUrl || !cfg.hiveMindApiKey) {
+      return;
+    }
 
     // Debounce
     const now = Date.now();
-    if (now - _lastSyncTime < SYNC_DEBOUNCE_MS) return;
+    if (now - _lastSyncTime < SYNC_DEBOUNCE_MS) {
+      console.log("[hive]", "sync skipped — debounce window");
+      return;
+    }
     _lastSyncTime = now;
 
     // ── Collect local data ──────────────────────────
 
-    // Lessons
+    // Lessons (cap at 200 most recent)
     const lessonsData = readJsonFile(LESSONS_FILE) || { lessons: [], performance: [] };
-    const lessons = lessonsData.lessons || [];
+    const lessons = (lessonsData.lessons || []).slice(-200);
 
-    // Pool deploys — flatten all pools' deploy arrays
+    // Pool deploys — flatten all pools' deploys arrays, filter out missing deployed_at
     const poolMemory = readJsonFile(POOL_MEMORY_FILE) || {};
     const deploys = [];
     for (const poolAddr of Object.keys(poolMemory)) {
       const pool = poolMemory[poolAddr];
       if (Array.isArray(pool.deploys)) {
         for (const d of pool.deploys) {
+          if (!d.deployed_at) continue;
           deploys.push({ pool_address: poolAddr, pool_name: pool.name, ...d });
         }
       }
     }
 
-    // Screening thresholds from config
+    // Screening thresholds
     const thresholds = {
       minFeeActiveTvlRatio: cfg.minFeeActiveTvlRatio,
       minTvl: cfg.minTvl,
@@ -167,24 +151,41 @@ export async function syncToHive() {
       maxBinStep: cfg.maxBinStep,
       minVolume: cfg.minVolume,
       minMcap: cfg.minMcap,
-      stopLossPct: cfg.stopLossPct ?? cfg.emergencyPriceDropPct,
+      stopLossPct: cfg.stopLossPct,
       takeProfitFeePct: cfg.takeProfitFeePct,
     };
 
-    // Agent stats via dynamic import (avoids circular deps)
+    // Agent stats — dynamic import to avoid circular deps at module load
     let agentStats = null;
     try {
       const { getPerformanceSummary } = await import("./lessons.js");
       agentStats = getPerformanceSummary();
     } catch (e) {
-      console.log("[hive]", `Could not load agent stats: ${e.message}`);
+      console.log("[hive]", `could not load agent stats: ${e.message}`);
     }
+
+    // Nugget facts (optional)
+    let nuggetFacts = [];
+    try {
+      const files = fs.readdirSync(NUGGETS_DIR).filter((f) => f.endsWith(".nugget.json"));
+      for (const file of files) {
+        try {
+          const category = file.replace(".nugget.json", "");
+          const nugget = JSON.parse(fs.readFileSync(path.join(NUGGETS_DIR, file), "utf8"));
+          if (Array.isArray(nugget.facts)) {
+            for (const fact of nugget.facts) {
+              nuggetFacts.push({ category, key: fact.key, value: fact.value, hits: fact.hits ?? 0 });
+            }
+          }
+        } catch { /* skip bad nuggets */ }
+      }
+    } catch { /* nuggets dir doesn't exist — fine */ }
 
     // ── POST to /api/sync ───────────────────────────
 
-    const payload = { lessons, deploys, thresholds, agentStats };
+    const payload = { lessons, deploys, thresholds, agentStats, nuggetFacts };
 
-    console.log("[hive]", `Syncing ${lessons.length} lessons, ${deploys.length} deploys...`);
+    console.log("[hive]", `syncing ${lessons.length} lessons, ${deploys.length} deploys, ${nuggetFacts.length} facts...`);
 
     const res = await fetchWithTimeout(
       `${cfg.hiveMindUrl}/api/sync`,
@@ -201,14 +202,13 @@ export async function syncToHive() {
 
     if (!res.ok) {
       const text = await res.text().catch(() => "");
-      console.log("[hive]", `Sync failed (${res.status}): ${text}`);
+      console.log("[hive]", `sync failed (${res.status}): ${text}`);
       return;
     }
 
-    const result = await res.json();
-    console.log("[hive]", `Sync complete — ${result.lessons_upserted} lessons, ${result.deploys_upserted} deploys`);
+    console.log("[hive]", "sync complete");
   } catch (e) {
-    console.log("[hive]", `Sync error: ${e.message}`);
+    console.log("[hive]", `sync error: ${e.message}`);
   }
 }
 
@@ -236,7 +236,7 @@ export async function queryPoolConsensus(poolAddress) {
 
 /**
  * Query lesson consensus by tags.
- * @param {string[]} [tags]
+ * @param {string[]} tags
  * @returns {Promise<Array|null>}
  */
 export async function queryLessonConsensus(tags) {
@@ -244,11 +244,9 @@ export async function queryLessonConsensus(tags) {
     const cfg = readConfig();
     if (!cfg.hiveMindUrl || !cfg.hiveMindApiKey) return null;
 
-    const qs = Array.isArray(tags) && tags.length > 0
-      ? `?tags=${encodeURIComponent(tags.join(","))}`
-      : "";
+    const tagStr = Array.isArray(tags) ? tags.join(",") : String(tags);
     const res = await fetchWithTimeout(
-      `${cfg.hiveMindUrl}/api/consensus/lessons${qs}`,
+      `${cfg.hiveMindUrl}/api/consensus/lessons?tags=${encodeURIComponent(tagStr)}`,
       { headers: { Authorization: `Bearer ${cfg.hiveMindApiKey}` } },
     );
 
@@ -261,7 +259,7 @@ export async function queryLessonConsensus(tags) {
 
 /**
  * Query pattern consensus for a given volatility level.
- * @param {number} [volatility]
+ * @param {number} volatility
  * @returns {Promise<Array|null>}
  */
 export async function queryPatternConsensus(volatility) {
@@ -269,9 +267,8 @@ export async function queryPatternConsensus(volatility) {
     const cfg = readConfig();
     if (!cfg.hiveMindUrl || !cfg.hiveMindApiKey) return null;
 
-    const qs = volatility != null ? `?volatility=${encodeURIComponent(volatility)}` : "";
     const res = await fetchWithTimeout(
-      `${cfg.hiveMindUrl}/api/consensus/patterns${qs}`,
+      `${cfg.hiveMindUrl}/api/consensus/patterns?volatility=${encodeURIComponent(volatility)}`,
       { headers: { Authorization: `Bearer ${cfg.hiveMindApiKey}` } },
     );
 
@@ -325,11 +322,22 @@ export async function getHivePulse() {
 }
 
 /**
+ * Check whether Hive Mind is configured and enabled.
+ * @returns {boolean}
+ */
+export function isEnabled() {
+  const cfg = readConfig();
+  return Boolean(cfg.hiveMindUrl && cfg.hiveMindApiKey);
+}
+
+/**
  * Query multiple pools in parallel and format for LLM prompt injection.
- * Only shows pools with >= 3 agents reporting (filters noise).
  * @param {string[]} poolAddresses
  * @returns {Promise<string>} Formatted consensus block or empty string
  */
+const MIN_AGENTS_FOR_CONSENSUS = 3; // Don't show noisy data from 1-2 agents
+const MAX_CONSENSUS_CHARS = 500;    // Hard cap on total injection size
+
 export async function formatPoolConsensusForPrompt(poolAddresses) {
   if (!isEnabled() || !Array.isArray(poolAddresses) || poolAddresses.length === 0) {
     return "";
@@ -356,6 +364,7 @@ export async function formatPoolConsensusForPrompt(poolAddresses) {
           : "N/A";
         lines.push(`[HIVE] ${name}: ${data.unique_agents} agents, ${winPct}% win, ${avgPnl} avg PnL`);
       }
+      // Skip pools with < MIN_AGENTS_FOR_CONSENSUS — not enough signal
     }
 
     if (lines.length === 0) return "";
@@ -363,6 +372,7 @@ export async function formatPoolConsensusForPrompt(poolAddresses) {
     const header = `HIVE MIND CONSENSUS (supplementary — your own analysis takes priority):`;
     let output = [header, ...lines].join("\n");
 
+    // Hard cap to prevent prompt bloat
     if (output.length > MAX_CONSENSUS_CHARS) {
       output = output.slice(0, MAX_CONSENSUS_CHARS - 3) + "...";
     }
