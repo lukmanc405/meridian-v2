@@ -615,18 +615,31 @@ ${candidateBlocks.join("\n\n")}
 
 STEPS:
 1. Pick the best candidate based on narrative quality, smart wallets, and pool metrics.
-2. Choose LP strategy based on market conditions (DATA-DRIVEN):
-   - If volume_5min >= $200,000 → lp_strategy = spot (tight bins 15-35, hold < 30 min)
-   - If volume_5min >= $20,000 and volatility > 50 → lp_strategy = spot (medium bins 30-50, hold 30-60 min)
-   - Otherwise → lp_strategy = bid_ask (medium bins 31-50, HOLD 1-4 HOURS MINIMUM — win rate jumps 70%→92%!)
-3. For spot strategy: ratio_token = 0.75 default (75% token, 25% SOL). Tight bins (15-35).
-   For bid_ask strategy: ratio_token = 0 (all SOL), bins_above = 0. Hold 1-4 hours minimum.
+2. Choose LP strategy based on market conditions (DATA-DRIVEN from 112 smart wallet analysis):
+   **HIGH VOLUME ($200K+/5min):** FAST FREQUENCY mode
+     → Deploy 0.5-1 SOL, tight bins (31-50)
+     → Hold 20-60 min max
+     → Exit after 1-2 fee captures, re-enter new opportunity
+   
+   **STEADY VOLUME ($50K-$200K/5min):** SLOW COMPOUND mode
+     → Deploy 1-2 SOL, wider bins (50+)
+     → Hold 4-24 hours MINIMUM
+     → Let fees compound
+     → Exit when IL > -10% or PnL > +15%
+   
+   **LOW VOLUME (<$50K/5min):** BidAsk only
+     → Deploy 0.5-1 SOL, tiny bins (31-40)
+     → Hold 1-4 hours
+     → Target fee capture only
+3. For FAST FREQUENCY: ratio_token = 0.5-0.75 (50-75% token), bins_above = bins_below/2
+   For SLOW COMPOUND: ratio_token = 0.1-0.2 (10-20% token, conservative), wider range
+   For BidAsk: ratio_token = 0 (all SOL), bins_above = 0
 4. EXIT RULES (non-negotiable):
-   - If PnL > +10% → take profit immediately
-   - If IL > -15% OR price exits range → cut loss immediately
-   - Spot: max hold 2h. BidAsk: MINIMUM hold 1h (longer = higher win rate)
-   - Tighter bins (31-50) outperform max range in EVERY strategy — never use 70+ bins
-5. Deposit sizing: Spot optimal $500-2K. Above $5K → use BidAsk instead (Spot breaks there).
+   - FAST FREQUENCY: PnL > +5% OR IL > -8% → exit immediately. Max hold 2h.
+   - SLOW COMPOUND: PnL > +15% OR IL > -10% → exit. NEVER exit before 4h.
+   - BidAsk: PnL > +5% OR price exits range → exit. Min hold 1h.
+   - CRITICAL: Never use 70+ bins. 31-50 bins outperform every time.
+5. Deposit: 0.5-1 SOL per position. Never deploy more than 1 SOL when balance < 1.5 SOL.
 5. Report in this exact format (no tables, no extra sections):
    🚀 DEPLOYED
 
