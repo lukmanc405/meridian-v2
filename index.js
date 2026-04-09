@@ -476,11 +476,12 @@ export async function runScreeningCycle({ silent = false } = {}) {
         mint ? getTokenNarrative({ mint }) : Promise.resolve(null),
         mint ? getTokenInfo({ query: mint }) : Promise.resolve(null),
       ]);
+      const tokenInfoResult = tokenInfo.status === "fulfilled" ? tokenInfo.value?.results?.[0] : null;
       allCandidates.push({
         pool,
         sw: smartWallets.status === "fulfilled" ? smartWallets.value : null,
         n: narrative.status === "fulfilled" ? narrative.value : null,
-        ti: tokenInfo.status === "fulfilled" ? tokenInfo.value?.results?.[0] : null,
+        ti: tokenInfoResult,
         mem: recallForPool(pool.pool),
       });
       // Stage signals for Darwinian weighting
@@ -489,7 +490,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
         fee_tvl_ratio: pool.fee_active_tvl_ratio,
         volume: pool.volume_5min,
         mcap: pool.mcap,
-        holder_count: ti?.holders ?? null,
+        holder_count: tokenInfoResult?.holders ?? null,
         smart_wallets_present: (smartWallets.status === "fulfilled" && smartWallets.value?.in_pool?.length > 0) ? 1 : 0,
         narrative_quality: narrative.status === "fulfilled" ? 1 : 0,
         study_win_rate: null,
@@ -498,7 +499,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
         ath_proximity: pool.price_vs_ath_pct,
         volume_trend: null,
         okx_signal_present: (pool.smart_money_buy || pool.kol_in_clusters) ? 1 : 0,
-        change_1h: ti?.stats_1h?.price_change ?? null,
+        change_1h: tokenInfoResult?.stats_1h?.price_change ?? null,
         candle_price_range: null,
       };
       stageSignals(pool.pool, stagedSignals, mint);
@@ -732,6 +733,21 @@ Summarize the current portfolio health, total fees earned, and performance of al
       `, config.llm.maxSteps, [], "MANAGER");
     } catch (error) {
       log("cron_error", `Health check failed: ${error.message}`);
+    } finally {
+      _managementBusy = false;
+    }
+  });
+
+  // Watchdog cron — every 5 min, checks for errors and auto-diagnoses
+  const watchdogTask = cron.schedule(`*/5 * * * *`, async () => {
+    if (_screeningBusy || _managementBusy) return;
+    _managementBusy = true;
+    log("cron", "Starting watchdog check");
+    try {
+      const { default: watchDog } = await import("./watchdog.js");
+      await watchDog.runWatchdog();
+    } catch (error) {
+      log("cron_error", `Watchdog check failed: ${error.message}`);
     } finally {
       _managementBusy = false;
     }
