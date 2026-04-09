@@ -1,7 +1,7 @@
 {
   "wallets": [
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #1",
       "address": "HTVQ7B7yhwkorAdfzaoqd5oVrjL4tWVo8Crb6C2nKCqa",
       "category": "lp",
       "type": "lp",
@@ -9,7 +9,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #2",
       "address": "BzaeLdLk7nyBTLYjgUAuYeqmh6QrwP66Wbeg47Fk6tG8",
       "category": "lp",
       "type": "lp",
@@ -17,7 +17,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #3",
       "address": "7DeCm4PJMBUAUTU7ftVPvmcBpvERBRVXxBUJSHCvtir6",
       "category": "lp",
       "type": "lp",
@@ -25,7 +25,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #4",
       "address": "7qGmrXBgPyzYJAGeeASePVon77ia4vgGPDWuJbKAR3bu",
       "category": "lp",
       "type": "lp",
@@ -33,7 +33,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #5",
       "address": "4a9xmr8WBcLGZjWWhpsQyJqwqjDoYQpnTGigxG4rueuP",
       "category": "lp",
       "type": "lp",
@@ -41,7 +41,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #6",
       "address": "BLEEQi8dvZZdBvgTxKfrb5R2abJJdPC5pSuxca5FN32y",
       "category": "lp",
       "type": "lp",
@@ -49,7 +49,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #7",
       "address": "3hSmFSEYV6P2oiFss2MruMG3TwgAxsanUgAKdmFjWtRT",
       "category": "lp",
       "type": "lp",
@@ -57,7 +57,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #8",
       "address": "Hsth9PdnPbfAU2cebZ1xBkMVj6zRKW3tNuzSv6cwLoAw",
       "category": "lp",
       "type": "lp",
@@ -65,7 +65,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #9",
       "address": "95dZXbEmKUfutjR37JxQdVMvz5tbhCHADtFSUUjPwfcE",
       "category": "lp",
       "type": "lp",
@@ -73,7 +73,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #10",
       "address": "9kuQBjyfo7Gz1b6HAYwP5jCoCygX3uY3ms12qHscwdn",
       "category": "lp",
       "type": "lp",
@@ -81,7 +81,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #11",
       "address": "HbhiBncEKzbZEj9n5hyEho8AxTfsnZxwMY2Kj2Chnc4X",
       "category": "lp",
       "type": "lp",
@@ -89,7 +89,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #12",
       "address": "BHj8AL9f9FQaLKRD4QTf7pUXFse7M9XjASJ9VzNKTEc8",
       "category": "lp",
       "type": "lp",
@@ -97,7 +97,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #13",
       "address": "C4WZ3J5tNmXoDRRVtaFGPAwM6Vonp6TVQF8BrzT46qmY",
       "category": "lp",
       "type": "lp",
@@ -105,7 +105,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #14",
       "address": "49qZ5fs7rRw4oSB9oJX4ep3EiTjsmxgkLEE4RTH1Sg72",
       "category": "lp",
       "type": "lp",
@@ -113,7 +113,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #15",
       "address": "7EmK8QMxSM3AnohVSi5pmShMqGMN8AokF1vaJFcMdano",
       "category": "lp",
       "type": "lp",
@@ -121,7 +121,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #16",
       "address": "4zkhBmA17o74eB5oADypx7CKy2GvHUU27semH5yjBZha",
       "category": "lp",
       "type": "lp",
@@ -129,7 +129,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #17",
       "address": "BzqX5kqC5Mg1j3UwXcZuRXtcbt6hGBN6H7wXuQUjc6Gy",
       "category": "lp",
       "type": "lp",
@@ -137,7 +137,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #18",
       "address": "4LyXMrKitaMUWzGhvoCNMQwXXgdu1rpYLNccQ3DaYF6R",
       "category": "lp",
       "type": "lp",
@@ -145,7 +145,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #19",
       "address": "FHpuVFpidv5YwJVdv7QV2YdZpdbhkdcF9FSCf6qD95ft",
       "category": "lp",
       "type": "lp",
@@ -153,7 +153,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #20",
       "address": "FtcGux2KQa2g9jjbGhebmnZDMao2EwzAf9oEDAtJ3HhS",
       "category": "lp",
       "type": "lp",
@@ -161,7 +161,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #21",
       "address": "9Bht7RTFyAAozof9WkC7zaQ2MMRECjFRjn7D1vBFicTt",
       "category": "lp",
       "type": "lp",
@@ -169,7 +169,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #22",
       "address": "DvHzCBX4fN1eppqmpJ25njwKeexDxsVwRWqLexkcBKXF",
       "category": "lp",
       "type": "lp",
@@ -177,7 +177,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #23",
       "address": "FMukQuz3t48WETKWKiVGZkz7Cuy1pVkMFBaGC3Ndy46D",
       "category": "lp",
       "type": "lp",
@@ -185,7 +185,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #24",
       "address": "3847uX4tDLLS1DkdKXJyuHf1DFk3jtpBpEpuyeyFyxhc",
       "category": "lp",
       "type": "lp",
@@ -193,7 +193,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #25",
       "address": "HnXbw2RUdg3HTAKZKR8aaWMVbBTWTiAGrENo1PTKtfni",
       "category": "lp",
       "type": "lp",
@@ -201,7 +201,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #26",
       "address": "73SuhtB2TAdoW6zUS1Jw5G4LTLiQ6GHKMQFMHyMgsekM",
       "category": "lp",
       "type": "lp",
@@ -209,7 +209,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #27",
       "address": "7XCRBRG2ZVdNkSdC7FjgYHcL5ke69hRNMCaZjxvc4NxC",
       "category": "lp",
       "type": "lp",
@@ -217,7 +217,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #28",
       "address": "FF3joykovLoyJLptDL7u2d3VBtp2rzcpLd15crCSDDNL",
       "category": "lp",
       "type": "lp",
@@ -225,7 +225,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #29",
       "address": "7MiP5K4sj7bpHgqyokgGGu3VQ5e6MWC333k6AgGUkb47",
       "category": "lp",
       "type": "lp",
@@ -233,7 +233,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #30",
       "address": "GMpK1uqaTpFEyeSL8kz1F44zzASbB6enVAqL9i285gCD",
       "category": "lp",
       "type": "lp",
@@ -241,7 +241,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #31",
       "address": "5cUoHwRqYqWsPSq6kMMrhS8bgJX8rv4bsTbMBKoj4nXU",
       "category": "lp",
       "type": "lp",
@@ -249,7 +249,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #32",
       "address": "6Kc6EV5NFTUPotn9kRTQen8QN2VbgEfoU75KEMh11PaV",
       "category": "lp",
       "type": "lp",
@@ -257,7 +257,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #33",
       "address": "F8EcAQt8E1rsWUHXd5gKG3vYCna36qwS8nBhNrB6KwYj",
       "category": "lp",
       "type": "lp",
@@ -265,7 +265,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #34",
       "address": "5QZzfEfPeFJfuDwki3xBEkNy3Qhy2yjEcfUHcaDgHTWS",
       "category": "lp",
       "type": "lp",
@@ -273,7 +273,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #35",
       "address": "9YZDq6W9Xbn5eLw3JDgzj1hVWXtD2Ew8LwViqtnCMRu3",
       "category": "lp",
       "type": "lp",
@@ -281,7 +281,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #36",
       "address": "J7sFyknU46QvjcfKjmYQPqwRtrrAmGfh8wYxWfKcztQu",
       "category": "lp",
       "type": "lp",
@@ -289,7 +289,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #37",
       "address": "A6MbDey1xucpe8u4ispJYJgqynwPgXvgh3jugxp5ygCq",
       "category": "lp",
       "type": "lp",
@@ -297,7 +297,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #38",
       "address": "8S2h6xzhdaW1xguqjmQvoV4m4nGtyCWPn9ezFf9FkWx8",
       "category": "lp",
       "type": "lp",
@@ -305,7 +305,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #39",
       "address": "BfNg4XWhWgytg2Yfc5MMmSq7hDEZubz8ynQGwAUvb7hH",
       "category": "lp",
       "type": "lp",
@@ -313,7 +313,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #40",
       "address": "9XWECMNmva22nQ6usNdPcJJvmrSWjKAXK5WNDQinABwX",
       "category": "lp",
       "type": "lp",
@@ -321,7 +321,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #41",
       "address": "HZf8qvcyBuWAJeF4vXtcT7FmsA6SPDuq8FeBHBnFH7qZ",
       "category": "lp",
       "type": "lp",
@@ -329,7 +329,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #42",
       "address": "3R4ESV2h81XHMPebysLCezzn7TPsQr888KThyr7CWkSJ",
       "category": "lp",
       "type": "lp",
@@ -337,7 +337,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #43",
       "address": "9RuRQ3jpBPHrZXL6WFqxnix5RXsCu9gMd6VJJj2pQZCx",
       "category": "lp",
       "type": "lp",
@@ -345,7 +345,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #44",
       "address": "2pLx4NZSpTZmpzDs6j9C5jtbMcpRYFkgTJqo1X1i3fvP",
       "category": "lp",
       "type": "lp",
@@ -353,7 +353,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #45",
       "address": "HtLoa26t62tNUpN6ucJm1R8NH3bTRt9K8bKdDLPucdnQ",
       "category": "lp",
       "type": "lp",
@@ -361,7 +361,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #46",
       "address": "2CjsVD4BZYBMCd19kVHhALEmMth12w7JcDZ2YGoho1Cx",
       "category": "lp",
       "type": "lp",
@@ -369,7 +369,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #47",
       "address": "ERECYoaSAXNdPdVgxGUB55bm1iSJaKbkM4JoHe7wMX7W",
       "category": "lp",
       "type": "lp",
@@ -377,7 +377,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #48",
       "address": "8xmK8N8htsp9JuajcdUKNLjnhR53PEfsMeryuGVSnWHS",
       "category": "lp",
       "type": "lp",
@@ -385,7 +385,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #49",
       "address": "5AFjWRT8RZDavw9DEyAJ571bFPDxUGJaNuZTRzfrR2TB",
       "category": "lp",
       "type": "lp",
@@ -393,7 +393,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #50",
       "address": "BrcaZkXPEVPb7P3rsgQL6Eh2Kt4LsJMGwEKNgtv7FLeF",
       "category": "lp",
       "type": "lp",
@@ -401,7 +401,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #51",
       "address": "9pQG1e7X7gnRqMrrv6cMKEu5qbDFTFmZRTtP5PvNzcZU",
       "category": "lp",
       "type": "lp",
@@ -409,7 +409,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #52",
       "address": "5uNatUp69zscFM1Wuwj4zbEyVkd1wmgwYiuSoX9zFi1e",
       "category": "lp",
       "type": "lp",
@@ -417,7 +417,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #53",
       "address": "9AbVCdzN8h4kJLpa1qAFTwWX1D8wyk3UefnKWH73nLPw",
       "category": "lp",
       "type": "lp",
@@ -425,7 +425,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #54",
       "address": "DdkKhaYDF8RosYfZsg513YDHEqyTZ6ymFc8xT8hYoyJr",
       "category": "lp",
       "type": "lp",
@@ -433,7 +433,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #55",
       "address": "35mD3SvNZUDR1HipfrPTM5Bctk6bCygD3iCm65QbfzEK",
       "category": "lp",
       "type": "lp",
@@ -441,7 +441,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #56",
       "address": "6AZSLTEUQm7pz8MQx2JJNSG8TH38AsBYK2YDJFy1RpLS",
       "category": "lp",
       "type": "lp",
@@ -449,7 +449,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #57",
       "address": "HgprW8MsevNwBp9DkxQy75MHabZkv4oE7AhzU46gycqa",
       "category": "lp",
       "type": "lp",
@@ -457,7 +457,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #58",
       "address": "FdU6WdARDGU2xeL4eFrr7HDgHVf8G8g4Vk556GTRHaEv",
       "category": "lp",
       "type": "lp",
@@ -465,7 +465,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #59",
       "address": "BMABCZzPJjsd4DjAvY6dQ6y5pbwxynKehJv7SsvLbfnM",
       "category": "lp",
       "type": "lp",
@@ -473,7 +473,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #60",
       "address": "5vvVw1Sur8b1HG74DwmWEaLqAQvjrg8FrtoqStWtWPm",
       "category": "lp",
       "type": "lp",
@@ -481,7 +481,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #61",
       "address": "DwwuE3rpVD4FJeYuJup16JnfQhxczAuGHjFTAe1wyzSr",
       "category": "lp",
       "type": "lp",
@@ -489,7 +489,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #62",
       "address": "9dH5Q6KZ3q2tghvnvcpU7q7wNrx7bVL3hMkYSjutEB1S",
       "category": "lp",
       "type": "lp",
@@ -497,7 +497,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #63",
       "address": "9Z1vLiXCzqwY4YxSZyjGkmQTKJmaeL9ZcpsaWErGsLQQ",
       "category": "lp",
       "type": "lp",
@@ -505,7 +505,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #64",
       "address": "FHJuWZ6L37VTGySyuZ6RSGAq7SuLhcHDroa4ovAc16M",
       "category": "lp",
       "type": "lp",
@@ -513,7 +513,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #65",
       "address": "8U5udFLHpTNWPQ3p8bu8nYvM22vtzi8XDbWNdL24Rw99",
       "category": "lp",
       "type": "lp",
@@ -521,7 +521,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #66",
       "address": "Esuun2uJTU5moU3LREm2xmjpxXsxmQF8obv4DUCtciZi",
       "category": "lp",
       "type": "lp",
@@ -529,7 +529,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #67",
       "address": "6Y8u48HfNFXMPzK3LjuBcuVb9ZpZPHeBdzRF5oZcqunu",
       "category": "lp",
       "type": "lp",
@@ -537,7 +537,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #68",
       "address": "5NgktpoFVbYKERTCcs9hPMX8L4mSWAaXjhmGHFhyk7AN",
       "category": "lp",
       "type": "lp",
@@ -545,7 +545,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #69",
       "address": "8iKd8yTZAiYCfchHa7XGEre2qaycGrVG88mXKbbtWx32",
       "category": "lp",
       "type": "lp",
@@ -553,7 +553,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #70",
       "address": "2DiUnnkyET1m2rnsiwiqowV3gzvvJ62ED8nMBy3SxjBG",
       "category": "lp",
       "type": "lp",
@@ -561,7 +561,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #71",
       "address": "rV6BuUjy6yPq7eRto53Xm66LMpT5UBpQr9qtL41PFAX",
       "category": "lp",
       "type": "lp",
@@ -569,7 +569,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #72",
       "address": "CkxfRw9VALXVXR69ovVcREKSbRpVu4LV8QSJ41LdSdp2",
       "category": "lp",
       "type": "lp",
@@ -577,7 +577,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #73",
       "address": "HgfAwZ1awtiqQaM1Kk1qUGmiXoHfyYB8MpSvjs7t63gV",
       "category": "lp",
       "type": "lp",
@@ -585,7 +585,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #74",
       "address": "7dtruexcpjMAyq1JYeRpgbXR86rnKMXq4TeRJ1Q1LPQU",
       "category": "lp",
       "type": "lp",
@@ -593,7 +593,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #75",
       "address": "BTRieMA4pQhazse9462Uk94h2bwhaaqDFWpqQG3YDEud",
       "category": "lp",
       "type": "lp",
@@ -601,7 +601,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #76",
       "address": "GgpU7afhLUWBBwr4YRiQYfwnwCfVia9LKMQdiFYNN96e",
       "category": "lp",
       "type": "lp",
@@ -609,7 +609,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #77",
       "address": "D9GkEze4DrBbLaxczv6onWoYENHqtT2484aP95YbyCo",
       "category": "lp",
       "type": "lp",
@@ -617,7 +617,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #78",
       "address": "8k5DEcMD3Xb2dWbeejdpxscY9cLTMJYsE3fbUbED9Np7",
       "category": "lp",
       "type": "lp",
@@ -625,7 +625,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #79",
       "address": "9ZhBVQSf4Ki7ygh5jLyirJVsq4fBHgMiCcGZKe4fgWak",
       "category": "lp",
       "type": "lp",
@@ -633,7 +633,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #80",
       "address": "J9eYzhFq6yKKRG5gj35CH2itZ8rgQpuPGZaNLcbQAkMW",
       "category": "lp",
       "type": "lp",
@@ -641,7 +641,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #81",
       "address": "2TSGXDmKjTf1KEM6AEASCs9oNA98YW3b7VzQnUaJziPa",
       "category": "lp",
       "type": "lp",
@@ -649,7 +649,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #82",
       "address": "J4wYoMuCykX2oofjATYidQF9WgQt7kRSfHZsA55TfkbD",
       "category": "lp",
       "type": "lp",
@@ -657,7 +657,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #83",
       "address": "fuckC22VGqLBYbaUT24YdRJrBgJR3D61zC5qkSbYayU",
       "category": "lp",
       "type": "lp",
@@ -665,7 +665,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #84",
       "address": "9Bp8RkRp3sn3ZBGGxzneHsYNrqZms47TdFa4GbYBc98L",
       "category": "lp",
       "type": "lp",
@@ -673,7 +673,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #85",
       "address": "DGdmr356TD58BYFhKzMp5tWv4zpqywYkgYHQBaUVD1Ln",
       "category": "lp",
       "type": "lp",
@@ -681,7 +681,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #86",
       "address": "F9CEEHiHV7r2rCQ6sGrKMTcfMD1qo39httbSP72oNv3w",
       "category": "lp",
       "type": "lp",
@@ -689,7 +689,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #87",
       "address": "E7uKcXH2CaBRZL4F8KeXFzSFRNBRdfGt8TitrNz4J662",
       "category": "lp",
       "type": "lp",
@@ -697,7 +697,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #88",
       "address": "AJYbGudZsvnAgsN7mpC3WrpXdDGN5hetCgWHv6v7wZ87",
       "category": "lp",
       "type": "lp",
@@ -705,7 +705,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #89",
       "address": "AkBd198SJVFrEfQYSsKjLgbAECN5ddmFRt28F45zLfxs",
       "category": "lp",
       "type": "lp",
@@ -713,7 +713,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #90",
       "address": "22ex2XMg4KmEXYywu7eqwmvKrpM6Vui3AsrDZJkxgU9g",
       "category": "lp",
       "type": "lp",
@@ -721,7 +721,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #91",
       "address": "5RPSkwfiL7a5KfDmg9Nxd4jP3xBg92iqvGmgT8xjxujD",
       "category": "lp",
       "type": "lp",
@@ -729,7 +729,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #92",
       "address": "58itiGzYASW6F5AE5f9yPpioC3x2Rc9Rq2V92S2e6V7h",
       "category": "lp",
       "type": "lp",
@@ -737,7 +737,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #93",
       "address": "HC8srnnKVxGCg5SMiXphGRZ83cBJMkwzabyyVodRHKws",
       "category": "lp",
       "type": "lp",
@@ -745,7 +745,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #94",
       "address": "BPjNvrMKdkvGx6iMrLoKsdcACvgPjtnZWXm31HmTRygs",
       "category": "lp",
       "type": "lp",
@@ -753,7 +753,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #95",
       "address": "CTyszCmxct4oMhW7iarmCH28AQcd3Vjgy9yMxc9JShTh",
       "category": "lp",
       "type": "lp",
@@ -761,7 +761,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #96",
       "address": "2skV9S8mitwbUju6ZfdMAFDeJSVqVSxJc7ftBDxXoJpV",
       "category": "lp",
       "type": "lp",
@@ -769,7 +769,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #97",
       "address": "1vPnS8jojPfi7XtuVFiQxTaUitjjiBLw7mtjCJxx1ki",
       "category": "lp",
       "type": "lp",
@@ -777,7 +777,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #98",
       "address": "3UK1Lmn1r5AzqixSYYRyDJHznEhYkzV8HmLYwFJUVi3o",
       "category": "lp",
       "type": "lp",
@@ -785,7 +785,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #99",
       "address": "2X8UWP8UBx3edRRo55veJaf554yZ3ezvdbB141qrbPA3",
       "category": "lp",
       "type": "lp",
@@ -793,7 +793,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #100",
       "address": "7aTh1tyHd99dPAF6uJBqkCesanEfhj4vW8X3D2HRsAgB",
       "category": "lp",
       "type": "lp",
@@ -801,7 +801,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #101",
       "address": "HjcE49Mo9ZsULuKEooytgbQteBZBknP58dXiaCRoSNqp",
       "category": "lp",
       "type": "lp",
@@ -809,7 +809,7 @@
       "note": "Extracted from LP Agent list"
     },
     {
-      "name": "Unknown LP",
+      "name": "SmartWallet #102",
       "address": "5sxkZ5LoKV1qLU2vTkEL3zBoj7rx1qdGaJNxYnzrbEQs",
       "category": "lp",
       "type": "lp",
