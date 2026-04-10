@@ -117,7 +117,7 @@ async function notifyLuke(message) {
   }
 }
 
-async function runWatchdog() {
+export async function runWatchdog() {
   logWatch("Watchdog run starting...");
 
   // Check if agent process is running
@@ -160,7 +160,7 @@ async function runWatchdog() {
       10, // maxSteps
       [], // sessionHistory
       "WATCHDOG",
-      "anthropic/claude-sonnet-4-5",
+      "z-ai/glm-5.1",
       2048,
       { requireTool: true }
     );

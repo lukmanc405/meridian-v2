@@ -744,8 +744,8 @@ Summarize the current portfolio health, total fees earned, and performance of al
     _managementBusy = true;
     log("cron", "Starting watchdog check");
     try {
-      const { default: watchDog } = await import("./watchdog.js");
-      await watchDog.runWatchdog();
+      const { runWatchdog } = await import("./watchdog.js");
+      await runWatchdog();
     } catch (error) {
       log("cron_error", `Watchdog check failed: ${error.message}`);
     } finally {
