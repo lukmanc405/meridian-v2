@@ -5,6 +5,8 @@
  */
 
 import "dotenv/config";
+import { readFileSync, appendFileSync, existsSync } from "fs";
+import { execSync } from "child_process";
 import { sendMessage, isEnabled as telegramEnabled } from "./telegram.js";
 import { log } from "./logger.js";
 import { agentLoop } from "./agent.js";
@@ -32,16 +34,16 @@ function logWatch(msg) {
   const entry = `[${formatDate()}] ${msg}`;
   console.log(entry);
   try {
-    const fs = require("fs");
-    fs.appendFileSync(WATCHDOG_LOG, entry + "\n");
+    
+    appendFileSync(WATCHDOG_LOG, entry + "\n");
   } catch {}
 }
 
 async function getRecentLogs(lines = 100) {
   try {
-    const fs = require("fs");
-    if (!fs.existsSync(LOG_FILE)) return [];
-    const content = fs.readFileSync(LOG_FILE, "utf8");
+    
+    if (!existsSync(LOG_FILE)) return [];
+    const content = readFileSync(LOG_FILE, "utf8");
     const allLines = content.split("\n").filter(Boolean);
     return allLines.slice(-lines);
   } catch {
@@ -51,7 +53,7 @@ async function getRecentLogs(lines = 100) {
 
 async function getAgentStatus() {
   try {
-    const { execSync } = require("child_process");
+    
     const out = execSync(`pgrep -f "${PROCESS_NAME}" | wc -l`, { encoding: "utf8" });
     const count = parseInt(out.trim()) || 0;
     return { running: count > 0, processCount: count };
@@ -126,7 +128,7 @@ export async function runWatchdog() {
     logWatch("Agent not running! Starting...");
     await notifyLuke("🔴 Agent DOWN - auto-restarting...");
     try {
-      const { execSync } = require("child_process");
+      
       execSync("cd /root/.openclaw/workspace/meridian && bash start.sh &", {
         detached: true, stdio: "ignore"
       });
@@ -179,7 +181,7 @@ export async function runWatchdog() {
     // Restart agent if fixes were applied
     logWatch("Fixes may have been applied - restarting agent...");
     try {
-      const { execSync } = require("child_process");
+      
       execSync("pkill -f 'node index.js' 2>/dev/null; sleep 2; cd /root/.openclaw/workspace/meridian && bash start.sh &", {
         stdio: "ignore"
       });
