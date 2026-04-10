@@ -162,6 +162,16 @@ export async function recordPerformance(perf) {
         log("evolve", `Darwin: adjusted ${wResult.changes.length} signal weight(s)`);
       }
     }
+
+    // Autoresearch: evaluate or start experiment
+    if (config.autoresearch?.enabled) {
+      try {
+        const { maybeRunAutoresearch } = await import("./autoresearch.js");
+        await maybeRunAutoresearch(data.performance, data.lessons, config);
+      } catch (e) {
+        log("autoresearch", `Error: ${e.message}`);
+      }
+    }
   }
 
   // Fire-and-forget sync to hive mind (if enabled)

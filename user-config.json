@@ -33,5 +33,13 @@
   "autoRegisterTelegram": true,
   "darwin": {
     "enabled": true
+  },
+  "autoresearch": {
+    "enabled": true,
+    "minClosesPerTrial": 7,
+    "minAttributedLosses": 3,
+    "cooldownAfterTrial": 5,
+    "maxConsecutive": 2,
+    "llmModel": "z-ai/glm-5.1"
   }
 }
