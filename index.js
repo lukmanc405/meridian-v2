@@ -605,10 +605,24 @@ export async function runScreeningCycle({ silent = false } = {}) {
     const signalBlock = weightsSummary
       ? `\n── SIGNAL WEIGHTS (prioritized screening signals) ──\n${weightsSummary}\n`
       : "";
+    // Winner patterns
+    let winnerBlock = "";
+    try {
+      const { getBestHours, getBestTIRRange, getWinnerStats } = await import("./tools/learn-from-winners.js");
+      const bestHours = getBestHours();
+      const bestTIR = getBestTIRRange();
+      const stats = getWinnerStats();
+      if (stats.total > 0) {
+        winnerBlock = `\n── WINNER PATTERNS (from our winning trades) ──\n`;
+        if (bestHours.length > 0) winnerBlock += `Best hours: ${bestHours.join(", ")}\n`;
+        if (bestTIR.min !== undefined) winnerBlock += `Best TIR range: ${bestTIR.min}-${bestTIR.max}%\n`;
+        winnerBlock += `Win stats: ${stats.wins}/${stats.total} (${stats.winRate}%) | Avg hold: ${stats.avgAge?.toFixed(0)}min\n`;
+      }
+    } catch(e) {}
 
     const { content } = await agentLoop(`
 SCREENING CYCLE
-${strategyBlock}${studyBlock}${signalBlock}
+${strategyBlock}${studyBlock}${signalBlock}${winnerBlock}
 Positions: ${prePositions.total_positions}/${config.risk.maxPositions} | SOL: ${currentBalance.sol.toFixed(3)} | Deploy: ${deployAmount} SOL
 
 PRE-LOADED CANDIDATES (${passing.length} pools):
@@ -621,17 +635,24 @@ STEPS:
      → Deploy 0.5-1 SOL, tight bins (31-50)
      → Hold 20-60 min max
      → Exit after 1-2 fee captures, re-enter new opportunity
+     ⚠️ IF volatility > 3.0 AND bin_step >= 80 → FORCE bid_ask instead (directional risk!)
    
    **STEADY VOLUME ($50K-$200K/5min):** SLOW COMPOUND mode
      → Deploy 1-2 SOL, wider bins (50+)
      → Hold 4-24 hours MINIMUM
      → Let fees compound
      → Exit when IL > -10% or PnL > +15%
+     ⚠️ IF volatility > 3.0 → use bid_ask or very tight spot (ratio_token <= 0.2)
    
    **LOW VOLUME (<$50K/5min):** BidAsk only
      → Deploy 0.5-1 SOL, tiny bins (31-40)
      → Hold 1-4 hours
      → Target fee capture only
+   
+   **HIGH VOLATILITY RULE:** If volatility > 3.0 with bin_step >= 80:
+     → MUST use bid_ask strategy ONLY (ratio_token = 0)
+     → Reason: high volatility + wide bins = directional bet, spot exposes to IL
+     → Exception: only use spot if you have strong conviction token will pump AND volume_trend is clearly upward
 3. For FAST FREQUENCY: ratio_token = 0.5-0.75 (50-75% token), bins_above = bins_below/2
    For SLOW COMPOUND: ratio_token = 0.1-0.2 (10-20% token, conservative), wider range
    For BidAsk: ratio_token = 0 (all SOL), bins_above = 0

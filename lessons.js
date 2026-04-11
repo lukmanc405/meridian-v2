@@ -127,6 +127,24 @@ export async function recordPerformance(perf) {
 
   save(data);
 
+  // Learn from winners — analyze winning patterns
+  if (entry.pnl_pct > 0) {
+    try {
+      const { analyzeWinner } = await import("./tools/learn-from-winners.js");
+      analyzeWinner({
+        pair: perf.pool_name || perf.pool,
+        poolAddress: perf.pool,
+        pnlPct: entry.pnl_pct,
+        age: perf.minutes_held || 0,
+        tirPercent: entry.range_efficiency || 0,
+        feeYield: entry.unclaimed_fee_usd || 0,
+        timestamp: entry.recorded_at || new Date().toISOString(),
+      });
+    } catch (e) {
+      log("lessons_warn", `Winner analysis failed: ${e.message}`);
+    }
+  }
+
   // Update pool-level memory
   if (perf.pool) {
     const { recordPoolDeploy } = await import("./pool-memory.js");
