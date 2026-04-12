@@ -759,20 +759,20 @@ Summarize the current portfolio health, total fees earned, and performance of al
     }
   });
 
-  // Watchdog cron — every 5 min, checks for errors and auto-diagnoses
-  const watchdogTask = cron.schedule(`*/5 * * * *`, async () => {
-    if (_screeningBusy || _managementBusy) return;
-    _managementBusy = true;
-    log("cron", "Starting watchdog check");
-    try {
-      const { runWatchdog } = await import("./watchdog.js");
-      await runWatchdog();
-    } catch (error) {
-      log("cron_error", `Watchdog check failed: ${error.message}`);
-    } finally {
-      _managementBusy = false;
-    }
-  });
+// DISABLED:   // Watchdog cron — every 5 min, checks for errors and auto-diagnoses
+// DISABLED:   const watchdogTask = cron.schedule(`*/5 * * * *`, async () => {
+// DISABLED:     if (_screeningBusy || _managementBusy) return;
+// DISABLED:     _managementBusy = true;
+// DISABLED:     log("cron", "Starting watchdog check");
+// DISABLED:     try {
+// DISABLED:       const { runWatchdog } = await import("./watchdog.js");
+// DISABLED:       await runWatchdog();
+// DISABLED:     } catch (error) {
+// DISABLED:       log("cron_error", `Watchdog check failed: ${error.message}`);
+// DISABLED:     } finally {
+// DISABLED:       _managementBusy = false;
+// DISABLED:     }
+// DISABLED:   });
 
   // Morning Briefing at 8:00 AM UTC+7 (1:00 AM UTC)
   const briefingTask = cron.schedule(`0 1 * * *`, async () => {
