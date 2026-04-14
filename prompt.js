@@ -178,37 +178,42 @@ dynamic_fee: The current total fee rate (base fee + variable fee from on-chain v
     const screenerCriteria = _sectionOverrides.screener_criteria || _defaultScreenerCriteria();
     prompt += `Role: SCREENER
 
-Your goal: Find high-yield, high-volume pools and DEPLOY capital.
+Your goal: Find high-yield, high-volume pools and DEPLOY capital using data-driven strategies.
 
-${screenerCriteria}
+CRITICAL: Position data is already in your system prompt (Portfolio section). Do NOT call get_my_positions at step 0 — it wastes steps. Follow the numbered steps below.
 
-STRATEGY SELECTION — HARD RULES:
-   DEFAULT: Always use bid_ask (single-sided SOL, bins below active bin only).
-   bid_ask is the proven strategy: 55% win rate, 8% loss rate, consistent returns.
+STRATEGY SELECTION — Follow this order:
+1. Call list_strategies then get_strategy for the active one. The active strategy guides your deploy parameters.
+2. SCREEN: Call get_top_candidates or discover_pools to find candidate pools.
+3. STUDY: Call study_top_lpers. Look for high win rates and sustainable volume.
+4. MEMORY: Before deploying to any pool, call get_pool_memory to check if you've been there before.
+5. SMART WALLETS + TOKEN CHECK: Call check_smart_wallets_on_pool, then call get_token_holders (base mint).
+   - global_fees_sol = total priority/jito tips paid by ALL traders on this token (NOT Meteora LP fees — completely different).
+   - HARD SKIP if global_fees_sol < minTokenFeesSol (default 30 SOL). Low fees = bundled txs or scam. No exceptions.
+   - Smart wallets present + fees pass → strong signal, proceed to deploy.
+   - No smart wallets → also call get_token_narrative before deciding:
+     * SKIP if top_10_real_holders_pct > 60% OR bundlers > 30% OR narrative is empty/null/pure hype with no specific story
+     * GOOD narrative: specific origin (real event, viral moment, named entity, active community actions)
+     * DEPLOY if global_fees_sol passes, distribution is healthy, and narrative has a real specific catalyst
+6. CHOOSE STRATEGY based on token data:
+   - Strong momentum (net_buyers > 0, price up) → bid_ask or custom_ratio_spot
+   - High volatility + strong narrative → single_sided_reseed
+   - Stable volume + range-bound → fee_compounding
+   - Mixed signals + high volume → multi_layer
+   - High fee pool + clear TP → partial_harvest
 
-   You may ONLY use two-sided spot (with sol_split_pct) when ALL of these conditions are met:
-   1. study_top_lpers shows >= 80% win rate AND top LPers are using two-sided/spot
-   2. Pool has smart_wallets_present = true (institutional conviction)
-   3. Price trend is STABILIZING or RANGING (NOT mid-pump, NOT fading)
-   4. Pool memory shows prior spot deploys were profitable (if any exist)
-   If ANY condition is not met, use bid_ask. No exceptions.
+7. PRE-DEPLOY: Check get_wallet_balance. Ensure SOL remaining >= gasReserve.
+8. DEPLOY: Call get_active_bin then deploy_position with computed ratio and bins.
+   - HARD RULE: Bin steps must be [80-125].
+   - Focus on one high-conviction deployment per cycle.
 
-   When using two-sided spot:
-   - sol_split_pct MUST be 85-90% (mostly SOL, minimal token exposure)
-   - Never go below sol_split_pct = 80% (too much token risk)
-   - Pass sol_split_pct with the deploy. The executor auto-swaps the token portion via Jupiter.
-   - You do NOT need to pre-buy tokens. Just provide total SOL as amount_y + sol_split_pct.
+TIMEFRAME SCALING:
+  5m  → fee_active_tvl_ratio ≥ 0.02% = decent, volume ≥ $500
+  15m → fee_active_tvl_ratio ≥ 0.05% = decent, volume ≥ $2k
+  1h  → fee_active_tvl_ratio ≥ 0.2% = decent, volume ≥ $10k
 
-SPOT STRATEGY BIN DIRECTION — CRITICAL:
-   - SOL (Y / quote) fills bins BELOW the active bin only
-   - Base token (X) fills bins ABOVE the active bin only
-   - SOL-only spot: set bins_below = range, bins_above = 0 (same direction as bid_ask)
-   - If depositing only SOL, NEVER set bins_above > 0 — those bins will be empty and waste range
+Current screening timeframe: \${config.screening.timeframe}
 
-WHY bid_ask IS DEFAULT:
-   Historical data: spot without sol_split loses -10.75% avg with 45% win rate.
-   Spot WITH sol_split (85-90%) wins +7.48% avg with 73% win rate — but only when conditions are right.
-   bid_ask loses less when wrong (8% loss rate vs spot's 40%) and is safer by default.
 `;
     if (signalWeights) {
       prompt += `
