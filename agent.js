@@ -156,8 +156,8 @@ export async function agentLoop(goal, maxSteps = config.llm.maxSteps, sessionHis
   // Track write tools fired this session — prevent the model from calling the same
   // destructive tool twice (e.g. deploy twice, swap twice after auto-swap)
   const ONCE_PER_SESSION = new Set(["deploy_position", "swap_token", "close_position"]);
-  // These lock after first attempt regardless of success — retrying them is always wrong
-  const NO_RETRY_TOOLS = new Set(["deploy_position"]);
+  // These lock after first SUCCESS — retrying after failure should be allowed (model can fix errors)
+  const NO_RETRY_TOOLS = new Set(["close_position"]);
   const firedOnce = new Set();
   const mustUseRealTool = shouldRequireRealToolUse(goal, agentType, requireTool);
   let sawToolCall = false;

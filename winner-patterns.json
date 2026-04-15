@@ -1,40 +1,108 @@
 {
   "byHour": {
+    "2": {
+      "wins": 2,
+      "total": 2
+    },
+    "3": {
+      "wins": 1,
+      "total": 1
+    },
+    "5": {
+      "wins": 1,
+      "total": 1
+    },
+    "6": {
+      "wins": 1,
+      "total": 1
+    },
+    "7": {
+      "wins": 1,
+      "total": 1
+    },
     "11": {
+      "wins": 3,
+      "total": 3
+    },
+    "12": {
       "wins": 1,
       "total": 1
     },
     "13": {
+      "wins": 4,
+      "total": 4
+    },
+    "14": {
+      "wins": 1,
+      "total": 1
+    },
+    "15": {
       "wins": 2,
       "total": 2
     },
     "16": {
-      "wins": 3,
-      "total": 3
+      "wins": 4,
+      "total": 4
     },
-    "21": {
+    "17": {
+      "wins": 2,
+      "total": 2
+    },
+    "19": {
       "wins": 1,
       "total": 1
+    },
+    "20": {
+      "wins": 2,
+      "total": 2
+    },
+    "21": {
+      "wins": 2,
+      "total": 2
     },
     "22": {
       "wins": 1,
       "total": 1
+    },
+    "23": {
+      "wins": 2,
+      "total": 2
     }
   },
   "byTIR": {
+    "10": {
+      "wins": 2,
+      "total": 2
+    },
+    "20": {
+      "wins": 2,
+      "total": 2
+    },
+    "50": {
+      "wins": 2,
+      "total": 2
+    },
+    "60": {
+      "wins": 4,
+      "total": 4
+    },
+    "70": {
+      "wins": 3,
+      "total": 3
+    },
     "80": {
-      "wins": 7,
-      "total": 7
+      "wins": 9,
+      "total": 9
     },
     "100": {
-      "wins": 1,
-      "total": 1
+      "wins": 9,
+      "total": 9
     }
   },
   "byFeeYield": {
     "0": {
-      "wins": 1,
-      "total": 1
+      "wins": 24,
+      "total": 24
     },
     "5": {
       "wins": 7,
@@ -180,6 +248,213 @@
       "tirPercent": 100,
       "feeYield": 0,
       "timestamp": "2026-04-10T22:29:52.823Z"
+    },
+    {
+      "pair": "PIXEL-SOL",
+      "poolAddress": "87ESAEYJKYpARBUeUioNjgadn9K4KhzoqJ95oN53oYkJ",
+      "pnlPct": 0.36,
+      "age": 79,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T06:10:16.518Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
+      "pnlPct": 9.41,
+      "age": 49,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T11:40:27.135Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
+      "pnlPct": 0.86,
+      "age": 19,
+      "tirPercent": 52.6,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T12:40:18.971Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
+      "pnlPct": 1.4,
+      "age": 15,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T13:26:25.371Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
+      "pnlPct": 6.84,
+      "age": 69,
+      "tirPercent": 82.6,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T14:40:17.699Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
+      "pnlPct": 0.13,
+      "age": 9,
+      "tirPercent": 11.1,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T15:00:17.340Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
+      "pnlPct": 3.42,
+      "age": 28,
+      "tirPercent": 75,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T15:50:17.782Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "6uXk5AJjhwRiAjG9XHiLtyT4PDHfEdEkB7RSQZpHt8Jh",
+      "pnlPct": 0.03,
+      "age": 68,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T17:18:43.919Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "A3Jcv2FUambPeagJp6UQgAWbaXVyPMNRV9HbComTa4cP",
+      "pnlPct": 1.17,
+      "age": 19,
+      "tirPercent": 26.3,
+      "feeYield": 0,
+      "timestamp": "2026-04-12T21:20:17.040Z"
+    },
+    {
+      "pair": "BULL-SOL",
+      "poolAddress": "7t4rFkukdTSEryPTdv2zyAooK55Y6bePDN1NSBnKKdss",
+      "pnlPct": 2.14,
+      "age": 88,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-13T02:49:35.548Z"
+    },
+    {
+      "pair": "BULL-SOL",
+      "poolAddress": "7t4rFkukdTSEryPTdv2zyAooK55Y6bePDN1NSBnKKdss",
+      "pnlPct": 0.48,
+      "age": 109,
+      "tirPercent": 88.1,
+      "feeYield": 0,
+      "timestamp": "2026-04-13T05:20:17.655Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "poolAddress": "rk51a7BHnsdQcD3heYoyZkJYy23KsPSTFMFL4uMwczR",
+      "pnlPct": 0.41,
+      "age": 31,
+      "tirPercent": 61.3,
+      "feeYield": 0,
+      "timestamp": "2026-04-13T11:30:16.980Z"
+    },
+    {
+      "pair": "GENZ-SOL",
+      "poolAddress": "EaNEbneW1YsfE9h6cDNs3jdiqvz7ynWWPMUK2dvcZQH6",
+      "pnlPct": 1.78,
+      "age": 172,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-13T19:54:11.151Z"
+    },
+    {
+      "pair": "BULL-SOL",
+      "poolAddress": "7t4rFkukdTSEryPTdv2zyAooK55Y6bePDN1NSBnKKdss",
+      "pnlPct": 0.42,
+      "age": 40,
+      "tirPercent": 25,
+      "feeYield": 0,
+      "timestamp": "2026-04-13T20:30:43.422Z"
+    },
+    {
+      "pair": "BULL-SOL",
+      "poolAddress": "7t4rFkukdTSEryPTdv2zyAooK55Y6bePDN1NSBnKKdss",
+      "pnlPct": 0.93,
+      "age": 49,
+      "tirPercent": 75.5,
+      "feeYield": 0,
+      "timestamp": "2026-04-13T23:20:16.197Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
+      "pnlPct": 0.54,
+      "age": 14,
+      "tirPercent": 71.4,
+      "feeYield": 0,
+      "timestamp": "2026-04-14T02:20:15.001Z"
+    },
+    {
+      "pair": "GENZ-SOL",
+      "poolAddress": "EaNEbneW1YsfE9h6cDNs3jdiqvz7ynWWPMUK2dvcZQH6",
+      "pnlPct": 0.83,
+      "age": 92,
+      "tirPercent": 67.4,
+      "feeYield": 0,
+      "timestamp": "2026-04-14T03:09:03.757Z"
+    },
+    {
+      "pair": "ALONSHOUSE-SOL",
+      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
+      "pnlPct": 3.76,
+      "age": 159,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-14T07:20:20.821Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "poolAddress": "7AqRdscJbVd2m3o3kPnNQHSMHNwFUyWNU2NRctyteADb",
+      "pnlPct": 0.7,
+      "age": 29,
+      "tirPercent": 55.2,
+      "feeYield": 0,
+      "timestamp": "2026-04-14T13:50:19.403Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "poolAddress": "7AqRdscJbVd2m3o3kPnNQHSMHNwFUyWNU2NRctyteADb",
+      "pnlPct": 0.54,
+      "age": 39,
+      "tirPercent": 61.5,
+      "feeYield": 0,
+      "timestamp": "2026-04-14T16:20:31.595Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "poolAddress": "7AqRdscJbVd2m3o3kPnNQHSMHNwFUyWNU2NRctyteADb",
+      "pnlPct": 1.73,
+      "age": 29,
+      "tirPercent": 69,
+      "feeYield": 0,
+      "timestamp": "2026-04-14T17:20:24.032Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "poolAddress": "rk51a7BHnsdQcD3heYoyZkJYy23KsPSTFMFL4uMwczR",
+      "pnlPct": 0.44,
+      "age": 89,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-14T20:20:18.291Z"
+    },
+    {
+      "pair": "ELON-SOL",
+      "poolAddress": "Hi7NkpbM6CvDChK1zikXSPkEP68KNMojWDG9wSL4B5td",
+      "pnlPct": 0.3,
+      "age": 9,
+      "tirPercent": 11.1,
+      "feeYield": 0,
+      "timestamp": "2026-04-14T23:50:13.002Z"
     }
   ]
 }

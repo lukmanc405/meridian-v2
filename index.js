@@ -632,7 +632,7 @@ STEPS:
 1. Pick the best candidate based on narrative quality, smart wallets, and pool metrics.
 2. Choose LP strategy based on market conditions (DATA-DRIVEN from 112 smart wallet analysis):
    **HIGH VOLUME ($200K+/5min):** FAST FREQUENCY mode
-     → Deploy 0.5-1 SOL, tight bins (31-50)
+     → Deploy ${deployAmount} SOL, tight bins (31-50)
      → Hold 20-60 min max
      → Exit after 1-2 fee captures, re-enter new opportunity
      ⚠️ IF volatility > 3.0 AND bin_step >= 80 → FORCE bid_ask instead (directional risk!)
@@ -645,7 +645,7 @@ STEPS:
      ⚠️ IF volatility > 3.0 → use bid_ask or very tight spot (ratio_token <= 0.2)
    
    **LOW VOLUME (<$50K/5min):** BidAsk only
-     → Deploy 0.5-1 SOL, tiny bins (31-40)
+     → Deploy ${deployAmount} SOL, tiny bins (31-40)
      → Hold 1-4 hours
      → Target fee capture only
    
@@ -661,7 +661,7 @@ STEPS:
    - SLOW COMPOUND: PnL > +15% OR IL > -10% → exit. NEVER exit before 4h.
    - BidAsk: PnL > +5% OR price exits range → exit. Min hold 1h.
    - CRITICAL: Never use 70+ bins. 31-50 bins outperform every time.
-5. Deposit: 0.5-1 SOL per position. Never deploy more than 1 SOL when balance < 1.5 SOL.
+5. Deposit: ${deployAmount} SOL per position. Use exactly this amount — do not adjust.
 5. Report in this exact format (no tables, no extra sections):
    🚀 DEPLOYED
 
@@ -711,7 +711,7 @@ STEPS:
 IMPORTANT:
 - Never write "unknown" for OKX. Use real values, omit missing fields, or write exactly "OKX: unavailable".
 - Keep the whole report compact and highly scannable for Telegram.
-      `, config.llm.maxSteps, [], "SCREENER", config.llm.screeningModel, 2048, {
+      `, config.llm.maxSteps, [], "SCREENER", config.llm.screeningModel, config.llm.maxTokens, {
         onToolStart: async ({ name }) => { await liveMessage?.toolStart(name); },
         onToolFinish: async ({ name, result, success }) => { await liveMessage?.toolFinish(name, result, success); },
       });
@@ -1124,9 +1124,11 @@ Commands:
     if (!isNaN(pick) && pick >= 1 && pick <= startupCandidates.length) {
       await runBusy(async () => {
         const pool = startupCandidates[pick - 1];
-        console.log(`\nDeploying ${DEPLOY} SOL into ${pool.name}...\n`);
+        const wallet = await getWalletBalances();
+        const dynamicDeploy = computeDeployAmount(wallet.sol);
+        console.log(`\nDeploying ${dynamicDeploy} SOL into ${pool.name}...\n`);
         const { content: reply } = await agentLoop(
-          `Deploy ${DEPLOY} SOL into pool ${pool.pool} (${pool.name}). Call get_active_bin first then deploy_position. Report result.`,
+          `Deploy ${dynamicDeploy} SOL into pool ${pool.pool} (${pool.name}). Call get_active_bin first then deploy_position. Report result. Use EXACTLY ${dynamicDeploy} SOL — do not use any other amount.`,
           config.llm.maxSteps,
           [],
           "SCREENER"
@@ -1140,9 +1142,11 @@ Commands:
     // ── auto: agent picks and deploys ───────
     if (input.toLowerCase() === "auto") {
       await runBusy(async () => {
+        const wallet = await getWalletBalances();
+        const dynamicDeploy = computeDeployAmount(wallet.sol);
         console.log("\nAgent is picking and deploying...\n");
         const { content: reply } = await agentLoop(
-          `get_top_candidates, pick the best one, get_active_bin, deploy_position with ${DEPLOY} SOL. Execute now, don't ask.`,
+          `get_top_candidates, pick the best one, get_active_bin, deploy_position with EXACTLY ${dynamicDeploy} SOL. Execute now, don't ask. Use ${dynamicDeploy} SOL — never any other amount.`,
           config.llm.maxSteps,
           [],
           "SCREENER"

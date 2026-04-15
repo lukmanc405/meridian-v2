@@ -20,7 +20,7 @@ import { addToBlacklist, removeFromBlacklist, listBlacklist } from "../token-bla
 import { blockDev, unblockDev, listBlockedDevs } from "../dev-blocklist.js";
 import { addSmartWallet, removeSmartWallet, listSmartWallets, checkSmartWalletsOnPool } from "../smart-wallets.js";
 import { getTokenInfo, getTokenHolders, getTokenNarrative } from "./token.js";
-import { config, reloadScreeningThresholds } from "../config.js";
+import { config, reloadScreeningThresholds, computeDeployAmount } from "../config.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -415,22 +415,29 @@ async function runSafetyChecks(name, args) {
       }
 
       const minDeploy = Math.max(0.1, config.management.deployAmountSol);
+      const balance = await getWalletBalances();
+      const recommendedDeploy = computeDeployAmount(balance.sol);
       if (amountY < minDeploy) {
         return {
           pass: false,
-          reason: `Amount ${amountY} SOL is below the minimum deploy amount (${minDeploy} SOL). Use at least ${minDeploy} SOL.`,
+          reason: `Amount ${amountY} SOL is below minimum (${minDeploy} SOL). Use EXACTLY ${recommendedDeploy} SOL (60% of your ${balance.sol.toFixed(2)} SOL balance). Never use ${amountY} SOL.`,
         };
       }
       if (amountY > config.risk.maxDeployAmount) {
         return {
           pass: false,
-          reason: `SOL amount ${amountY} exceeds maximum allowed per position (${config.risk.maxDeployAmount}).`,
+          reason: `Amount ${amountY} SOL is above maximum (${config.risk.maxDeployAmount} SOL). Use EXACTLY ${recommendedDeploy} SOL.`,
+        };
+      }
+      if (Math.abs(amountY - recommendedDeploy) > 0.1) {
+        return {
+          pass: false,
+          reason: `Amount ${amountY} SOL does not match recommended ${recommendedDeploy} SOL. Use EXACTLY ${recommendedDeploy} SOL — this is calculated as 60% of your ${balance.sol.toFixed(2)} SOL balance.`,
         };
       }
 
       // Check SOL balance
       if (process.env.DRY_RUN !== "true") {
-        const balance = await getWalletBalances();
         const gasReserve = config.management.gasReserve;
         const minRequired = amountY + gasReserve;
         if (balance.sol < minRequired) {
