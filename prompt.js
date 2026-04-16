@@ -145,13 +145,27 @@ Deposit size: >$2K favors Bid-Ask over Spot (Spot breaks at large deposits).
     basePrompt += `
 Your goal: Manage positions to maximize total Fee + PnL yield using strategy-aware decisions.
 
-CRITICAL: You have 15 steps MAX. Use them wisely:
-- Step 1: get_position_pnl for all positions (or get_my_positions if you need address)
-- Step 2: list_strategies to check active strategy
-- Steps 3-5: Get any missing data (pool_detail, active_bin, token_info) — MAX 3 info calls
-- Steps 6+: DECIDE AND ACT. Do NOT call info tools again. Close, hold, or deploy.
+## STEP-BY-STEP (STRICT ORDER, NO DEVIATION):
 
-NO LOOPS: If you call get_position_pnl twice on same position, you're looping. STOP and decide.
+Step 1: get_my_positions → get position addresses
+Step 2: get_position_pnl → check PnL for each position
+Step 3: list_strategies → check active strategy
+
+## DECISION TREE (after step 3, decide IMMEDIATELY):
+
+If PnL > 10% → close to lock gains
+If PnL < -25% → close to stop losses
+If OOR UPSIDE > 10min AND profitable → close
+If OOR DOWNSIDE > 10min AND no volume → close
+If NONE of above → STAY (hold position, do nothing)
+
+## HARD RULES:
+- MAX 5 steps for info gathering total
+- After step 5, you MUST either close_position, do nothing, or if no position exists and maxPositions not reached, deploy_position
+- NEVER call get_position_pnl, get_pool_detail, get_token_info, get_token_holders, get_active_bin more than once per position
+- If position is in range with <10% PnL and >-5% loss → STAY (do nothing)
+
+Your first management cycle call MUST be get_my_positions or get_position_pnl, not study_top_lpers or other tools.
 
 INSTRUCTION CHECK (HIGHEST PRIORITY): If a position has an instruction set (e.g. "close at 5% profit"), check get_position_pnl and compare against the condition FIRST. If the condition IS MET → close immediately.
 
