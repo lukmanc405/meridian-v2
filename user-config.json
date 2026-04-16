@@ -25,7 +25,7 @@
   "maxMcap": 7500000,
   "minBinStep": 100,
   "maxBinStep": 125,
-  "timeframe": "5m",
+  "timeframe": "30m",
   "category": "trending",
   "minTokenFeesSol": 30,
   "maxBundlersPct": 25,
