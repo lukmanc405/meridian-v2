@@ -79,8 +79,9 @@ export const config = {
 
   // ─── Strategy Mapping ───────────────────
   strategy: {
-    strategy:  u.strategy  ?? "bid_ask",
-    binsBelow: u.binsBelow ?? 69,
+    strategy:    u.strategyMode       ?? u.strategy    ?? "bid_ask",
+    binsBelow:    u.strategyBinsBelow ?? u.binsBelow  ?? 50,
+    binsAbove:    u.strategyBinsAbove ?? u.binsAbove  ?? 0,
   },
 
   // ─── Scheduling ─────────────────────────
