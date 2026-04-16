@@ -32,7 +32,7 @@
   "maxTop10Pct": 50,
   "minVol5Min": 1000,
   "minTokenAgeHours": 0.5,
-  "maxTokenAgeHours": 720,
+  "maxTokenAgeHours": 5000,
   "trailingTakeProfit": true,
   "trailingTriggerPct": 3,
   "trailingDropPct": 1.5,
