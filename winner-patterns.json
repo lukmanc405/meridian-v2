@@ -9,8 +9,8 @@
       "total": 3
     },
     "4": {
-      "wins": 1,
-      "total": 1
+      "wins": 3,
+      "total": 3
     },
     "5": {
       "wins": 1,
@@ -119,14 +119,14 @@
       "total": 1
     },
     "100": {
-      "wins": 15,
-      "total": 15
+      "wins": 17,
+      "total": 17
     }
   },
   "byFeeYield": {
     "0": {
-      "wins": 35,
-      "total": 35
+      "wins": 37,
+      "total": 37
     },
     "5": {
       "wins": 7,
@@ -168,6 +168,13 @@
       "age": 4,
       "tirPercent": 25,
       "timestamp": "2026-04-15T23:50:20.988Z"
+    },
+    {
+      "pair": "Pigeon-SOL",
+      "pnlPct": 0.09,
+      "age": 4,
+      "tirPercent": 100,
+      "timestamp": "2026-04-16T04:10:43.548Z"
     }
   ],
   "bigWins": [
@@ -585,6 +592,24 @@
       "tirPercent": 25,
       "feeYield": 0,
       "timestamp": "2026-04-15T23:50:20.988Z"
+    },
+    {
+      "pair": "Pigeon-SOL",
+      "poolAddress": "HiSBtzHFeFDADpUAhYDdftqJCAi3XzwsTYsDDHqfMjTJ",
+      "pnlPct": 0.34,
+      "age": 60,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T04:05:15.148Z"
+    },
+    {
+      "pair": "Pigeon-SOL",
+      "poolAddress": "HiSBtzHFeFDADpUAhYDdftqJCAi3XzwsTYsDDHqfMjTJ",
+      "pnlPct": 0.09,
+      "age": 4,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T04:10:43.548Z"
     }
   ]
 }

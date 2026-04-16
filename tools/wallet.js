@@ -11,10 +11,28 @@ import { config } from "../config.js";
 
 let _connection = null;
 let _wallet = null;
+let _rpcIndex = 0;
+
+const RPC_ENDPOINTS = [
+  process.env.RPC_URL, // Primary Helius
+  "https://solana-mainnet.rpc.extrnode.com/auth",
+  "https://solana-api.walletconnect.org",
+].filter(Boolean);
 
 function getConnection() {
-  if (!_connection) _connection = new Connection(process.env.RPC_URL, "confirmed");
+  if (!_connection) {
+    const rpc = RPC_ENDPOINTS[_rpcIndex % RPC_ENDPOINTS.length];
+    _connection = new Connection(rpc, "confirmed");
+  }
   return _connection;
+}
+
+function rotateRpc() {
+  if (RPC_ENDPOINTS.length > 1) {
+    _rpcIndex++;
+    _connection = null;
+    log("rpc", `Rotated to: ${RPC_ENDPOINTS[_rpcIndex % RPC_ENDPOINTS.length]}`);
+  }
 }
 
 function getWallet() {
