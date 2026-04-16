@@ -34,7 +34,7 @@ export const config = {
     minHolders:        u.minHolders        ?? 500,
     minMcap:           u.minMcap           ?? 150_000,
     maxMcap:           u.maxMcap           ?? 10_000_000,
-    minBinStep:        u.minBinStep        ?? 80,
+    minBinStep:        u.minBinStep        ?? 20,
     maxBinStep:        u.maxBinStep        ?? 125,
     timeframe:         u.timeframe         ?? "30m",
     category:          u.category          ?? "trending",
