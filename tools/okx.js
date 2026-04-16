@@ -206,3 +206,163 @@ export async function getFullTokenAnalysis(tokenAddress, chainIndex = CHAIN_SOLA
     price:    price.status    === "fulfilled" ? price.value    : null,
   };
 }
+
+/**
+ * Evil Panda Technical Indicators
+ * RSI(2), MACD, Bollinger Bands, Supertrend
+ */
+
+function sma(values, period) {
+  if (values.length < period) return null;
+  const slice = values.slice(-period);
+  return slice.reduce((a, b) => a + b, 0) / period;
+}
+
+function emaSeries(values, period) {
+  const k = 2 / (period + 1);
+  const result = [];
+  let ema = null;
+  for (let i = 0; i < values.length; i++) {
+    if (i < period) {
+      result.push(null);
+      continue;
+    }
+    if (ema === null) {
+      ema = sma(values.slice(i - period, i), period);
+    }
+    ema = values[i] * k + ema * (1 - k);
+    result.push(ema);
+  }
+  return result;
+}
+
+function rsi(values, period = 2) {
+  if (values.length <= period) return null;
+  let gains = 0;
+  let losses = 0;
+  for (let i = values.length - period; i < values.length; i++) {
+    const change = values[i] - values[i - 1];
+    if (change >= 0) gains += change;
+    else losses += Math.abs(change);
+  }
+  if (losses === 0) return gains === 0 ? 50 : 100;
+  const rs = gains / losses;
+  return 100 - (100 / (1 + rs));
+}
+
+function macd(closes, fast = 12, slow = 26, signal = 9) {
+  if (closes.length < slow + signal) return null;
+  const fastEma = emaSeries(closes, fast);
+  const slowEma = emaSeries(closes, slow);
+  const macdLine = closes.map((_, i) =>
+    fastEma[i] != null && slowEma[i] != null ? fastEma[i] - slowEma[i] : null
+  );
+  const compact = macdLine.filter((value) => value != null);
+  if (compact.length < signal) return null;
+  const signalCompact = emaSeries(compact, signal);
+  const hist = compact.map((value, i) =>
+    signalCompact[i] != null ? value - signalCompact[i] : null
+  ).filter((value) => value != null);
+  const latestHist = hist.at(-1);
+  const prevHist = hist.at(-2);
+  return {
+    line: roundTo(compact.at(-1), 10),
+    signal: roundTo(signalCompact.filter((value) => value != null).at(-1), 10),
+    histogram: roundTo(latestHist, 10),
+    first_green_histogram: prevHist != null && prevHist <= 0 && latestHist > 0,
+  };
+}
+
+function averageTrueRange(candles, period = 10) {
+  if (candles.length <= period) return null;
+  const trs = [];
+  for (let i = 1; i < candles.length; i++) {
+    const prevClose = candles[i - 1].close;
+    trs.push(Math.max(
+      candles[i].high - candles[i].low,
+      Math.abs(candles[i].high - prevClose),
+      Math.abs(candles[i].low - prevClose)
+    ));
+  }
+  return sma(trs, period);
+}
+
+function supertrend(candles, period = 10, multiplier = 3) {
+  if (candles.length <= period + 1) return null;
+  const states = [];
+
+  for (let i = period; i < candles.length; i++) {
+    const window = candles.slice(0, i + 1);
+    const atr = averageTrueRange(window, period);
+    if (atr == null) continue;
+
+    const candle = candles[i];
+    const hl2 = (candle.high + candle.low) / 2;
+    const basicUpper = hl2 + multiplier * atr;
+    const basicLower = hl2 - multiplier * atr;
+    const prev = states.at(-1);
+
+    const finalUpper = !prev || basicUpper < prev.finalUpper || candles[i - 1].close > prev.finalUpper
+      ? basicUpper
+      : prev.finalUpper;
+    const finalLower = !prev || basicLower > prev.finalLower || candles[i - 1].close < prev.finalLower
+      ? basicLower
+      : prev.finalLower;
+
+    let direction = "green";
+    let value = finalLower;
+    if (prev?.direction === "green") {
+      direction = candle.close < finalLower ? "red" : "green";
+    } else if (prev?.direction === "red") {
+      direction = candle.close > finalUpper ? "green" : "red";
+    }
+    if (direction === "red") value = finalUpper;
+
+    states.push({
+      i,
+      direction,
+      value: roundTo(value, 10),
+      finalUpper: roundTo(finalUpper, 10),
+      finalLower: roundTo(finalLower, 10),
+      price_above: candle.close > value,
+    });
+  }
+
+  const last = states.at(-1);
+  return last || null;
+}
+
+/**
+ * Get Evil Panda indicators for a token on OKX exchange
+ */
+export async function getEvilPandaIndicators(tokenAddress) {
+  try {
+    const parsed = await fetchOHLCV(tokenAddress, "sol", "5m", 500);
+    if (!parsed || parsed.length < 50) {
+      return { error: "Insufficient candle data" };
+    }
+
+    const allCloses = parsed.map((c) => c.close);
+    const latestRsi2 = rsi(allCloses, 2);
+    const macdResult = macd(allCloses);
+    const supertrendResult = supertrend(parsed, 10, 3);
+
+    const rsi2Above90 = latestRsi2 != null && latestRsi2 > 90;
+    const macdFirstGreen = !!macdResult?.first_green_histogram;
+
+    return {
+      rsi_2: roundTo(latestRsi2, 2),
+      rsi_2_above_90: rsi2Above90,
+      macd: macdResult,
+      macd_first_green_histogram: macdFirstGreen,
+      supertrend: supertrendResult,
+      supertrend_direction: supertrendResult?.direction || null,
+      supertrend_green: supertrendResult?.direction === "green",
+      supertrend_price_above: !!supertrendResult?.price_above,
+      evil_panda_entry_ok: supertrendResult?.direction === "green" && !!supertrendResult?.price_above,
+      candles_used: parsed.length,
+    };
+  } catch (e) {
+    return { error: e.message };
+  }
+}

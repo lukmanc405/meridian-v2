@@ -21,8 +21,8 @@
       "total": 2
     },
     "7": {
-      "wins": 2,
-      "total": 2
+      "wins": 3,
+      "total": 3
     },
     "9": {
       "wins": 2,
@@ -119,14 +119,14 @@
       "total": 1
     },
     "100": {
-      "wins": 18,
-      "total": 18
+      "wins": 19,
+      "total": 19
     }
   },
   "byFeeYield": {
     "0": {
-      "wins": 38,
-      "total": 38
+      "wins": 39,
+      "total": 39
     },
     "5": {
       "wins": 7,
@@ -626,6 +626,15 @@
       "tirPercent": 100,
       "feeYield": 0,
       "timestamp": "2026-04-16T06:09:17.621Z"
+    },
+    {
+      "pair": "4vwaaZZS",
+      "poolAddress": "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "pnlPct": 0.5,
+      "age": 60,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T07:20:13.765Z"
     }
   ]
 }

@@ -172,7 +172,7 @@ export async function getTopCandidates({ limit = 10 } = {}) {
 
   // Enrich with OKX data — advanced info (risk/bundle/sniper) + ATH price (no API key required)
   if (eligible.length > 0) {
-    const { getAdvancedInfo, getPriceInfo, getClusterList, getRiskFlags } = await import("./okx.js");
+    const { getAdvancedInfo, getPriceInfo, getClusterList, getRiskFlags, getEvilPandaIndicators } = await import("./okx.js");
     const okxResults = await Promise.allSettled(
       eligible.map(async (p) => {
         if (!p.base?.mint) return { adv: null, price: null, clusters: [], risk: null };
@@ -201,6 +201,17 @@ export async function getTopCandidates({ limit = 10 } = {}) {
       const r = okxResults[i];
       if (r.status !== "fulfilled") continue;
       const { adv, price, clusters, risk } = r.value;
+      
+      // Evil Panda indicators (only fetch if using evil_panda strategy)
+      if (config.strategy?.activeStrategy === "evil_panda" && p.base?.mint) {
+        const evilPanda = await getEvilPandaIndicators(p.base.mint);
+        if (evilPanda && !evilPanda.error) {
+          eligible[i].evil_panda = evilPanda;
+          eligible[i].evil_panda_entry_ok = evilPanda.evil_panda_entry_ok;
+          log("okx", `${p.name}: Evil Panda — supertrend_${evilPanda.supertrend_direction}, rsi_2=${evilPanda.rsi_2}, entry_ok=${evilPanda.evil_panda_entry_ok}`);
+        }
+      }
+      
       if (adv) {
         eligible[i].risk_level      = adv.risk_level;
         eligible[i].bundle_pct      = adv.bundle_pct;

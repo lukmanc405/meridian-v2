@@ -1,10 +1,6 @@
 /**
  * Build a specialized system prompt based on the agent's current role.
  *
- * CACHE OPTIMIZATION: Static content is front-loaded so DeepSeek's automatic
- * prefix caching hits on the first ~3-4K tokens across all calls.
- * Dynamic/per-call data goes at the end where cache breaks are expected.
- *
  * @param {string} agentType - "SCREENER" | "MANAGER" | "GENERAL"
  * @param {Object} portfolio - Current wallet balances
  * @param {Object} positions - Current open positions
@@ -14,130 +10,32 @@
  * @returns {string} - Complete system prompt
  */
 import { config } from "./config.js";
-import { getKbSummaryForPrompt } from "./knowledge-base.js";
 
-// ─── Section Override System (used by autoresearch) ──────────
-const _sectionOverrides = {};
+export function buildSystemPrompt(agentType, portfolio, positions, stateSummary = null, lessons = null, perfSummary = null) {
+  const s = config.screening;
 
-export function setPromptSectionOverride(section, text) {
-  _sectionOverrides[section] = text;
-}
+  let basePrompt = `You are an autonomous DLMM LP (Liquidity Provider) agent operating on Meteora, Solana.
+Role: ${agentType || "GENERAL"}
 
-export function clearPromptSectionOverride(section) {
-  delete _sectionOverrides[section];
-}
+═══════════════════════════════════════════
+ CURRENT STATE
+═══════════════════════════════════════════
 
-/**
- * Return the current text for a named prompt section.
- * If an override is active, returns the override; otherwise the default.
- */
-export function getPromptSectionText(section) {
-  if (_sectionOverrides[section]) return _sectionOverrides[section];
-  // Return default section text
-  const defaults = _getDefaultSections();
-  return defaults[section] || null;
-}
+Portfolio: ${JSON.stringify(portfolio, null, 2)}
+Open Positions: ${JSON.stringify(positions, null, 2)}
+Memory: ${JSON.stringify(stateSummary, null, 2)}
+Performance: ${perfSummary ? JSON.stringify(perfSummary, null, 2) : "No closed positions yet"}
 
-/**
- * Range selection text — used by index.js screening cycle.
- * Autoresearch can override this section.
- */
-export function getRangeSelectionText(deployAmount, currentBalanceSol) {
-  if (_sectionOverrides.range_selection) return _sectionOverrides.range_selection;
-  return _defaultRangeSelectionText(deployAmount, currentBalanceSol);
-}
+Config: ${JSON.stringify({
+  screening: config.screening,
+  management: config.management,
+  schedule: config.schedule,
+}, null, 2)}
 
-function _defaultRangeSelectionText(deployAmount, currentBalanceSol) {
-  return `- RANGE SIZING (volatility-driven — do NOT use study_top_lpers avg_range_pct for range):
-  Size your range from the pool's CURRENT conditions, not historical LPer behavior:
-
-  Pool Volatility  │ bid_ask range │ spot range  │ Reasoning
-  ─────────────────┼───────────────┼─────────────┼─────────────────────────────
-  >= 8  (extreme)  │ 55–75%        │ 65–85%      │ Wild swings, need maximum room
-  5–8   (high)     │ 45–60%        │ 55–70%      │ Active memecoin territory
-  2–5   (moderate) │ 40–55%        │ 50–65%      │ Normal volatile pool — stay wide
-  < 2   (low)      │ 35–45%        │ 40–50%      │ Ranging/stable, still need buffer
-  BIAS: Always pick the UPPER HALF of the range band. Wider is safer — tighter only if 3+ recent lessons confirm in-range stability for this exact pool.
-
-  Adjust from the table using your MEMORY and LESSONS:
-  - If LESSONS show repeated OOR downside on similar pools → go wider within the band
-  - If LESSONS show positions staying in range → go tighter for better fee concentration
-  - study_top_lpers patterns (hold time, strategy, win rate) are useful context but their avg_range_pct reflects a DIFFERENT market regime — do not copy it
-
-- ATH PROXIMITY OVERRIDE:
-  If candidate shows ath >= ${config.screening.athTopThresholdPct ?? 90}% of all-time high, the token is near its peak with maximum downside risk.
-  Override bid_ask range to 65-80% regardless of volatility table. This provides extra downside buffer for the likely retrace from ATH.
-- MOMENTUM CHECK (5m vs 1h price change):
-  * 1h positive + 5m negative → PUMP FADING: the move is reversing. Widen range or skip.
-  * 1h negative + 5m flat/positive → STABILIZING: good bid_ask entry on sell pressure.
-  * 1h positive + 5m positive → STILL PUMPING: bid_ask SOL will sit idle until sells come.
-  * Both flat → RANGING: safest entry, use volatility table as-is.
-
-- OOR DIRECTION MATTERS — widening range only helps if OOR matches the direction your liquidity extends:
-  * bid_ask (SOL below active bin): range extends DOWNWARD only. Wider range helps with DOWNSIDE OOR. Widening CANNOT fix upside OOR — price pumped above your liquidity and no amount of extra bins below will reach it.
-  * If you keep going OOR-upside on bid_ask, the problem is NOT range width — the token is pumping away from your position. Either wait for the pump to end, use a two-sided strategy with token exposure (sol_split_pct < 100), or skip the pool entirely.
-  * spot (SOL-only, bins below): same as bid_ask — wider only helps downside OOR.
-  * spot (two-sided): wider range helps BOTH directions since liquidity spans above and below.
-  * NEVER generate a lesson saying "use wider range" for upside OOR on a single-sided-below strategy. That analysis is fundamentally wrong.
-- COMPOUNDING: Deploy amount is ${deployAmount} SOL (scaled from wallet: ${currentBalanceSol ?? "?"} SOL). Do NOT override with a smaller amount.
-- After deploy: update_config setting=managementIntervalMin based on volatility (>=5→3, 2-5→5, <2→10).
-- Report: strategy chosen + why, price_range_pct used + volatility basis, deploy amount, interval set.`;
-}
-
-/** Build default section texts (without config interpolation for manager_logic) */
-function _getDefaultSections() {
-  return {
-    screener_criteria: _defaultScreenerCriteria(),
-    manager_logic: _defaultManagerLogic(),
-    range_selection: _defaultRangeSelectionText("${deployAmount}", "${currentBalanceSol}"),
-  };
-}
-
-function _defaultScreenerCriteria() {
-  return `1. SCREEN: Use get_top_candidates or discover_pools.
-2. STUDY: Call study_top_lpers. Look for high win rates, sustainable volume, strategy choices (bid_ask vs spot), and hold times. Do NOT use avg_range_pct for your range — size from the volatility table in range selection rules instead.
-3. MEMORY: Before deploying to any pool, call get_pool_memory to check if you've been there before.
-4. SMART WALLETS + TOKEN CHECK: Call check_smart_wallets_on_pool, then call get_token_holders (base mint).
-   - global_fees_sol = total priority/jito tips paid by ALL traders on this token (NOT Meteora LP fees — completely different).
-   - HARD SKIP if global_fees_sol < minTokenFeesSol (default 30 SOL). Low fees = bundled txs or scam. No exceptions.
-   - Smart wallets present + fees pass → strong signal, proceed to deploy.
-   - If OKX signal metrics are preloaded in the cycle context, treat them as an external wallet-confirmation layer.
-   - No smart wallets and no OKX confirmation → also call get_token_narrative before deciding:
-     * SKIP if top_10_real_holders_pct > 60% OR bundlers > 30% OR narrative is empty/null/pure hype with no specific story
-     * CAUTION if bundlers 15–30% AND top_10 > 40% — check organic + buy/sell pressure
-     * Bundlers 5–15% are normal, not a skip signal on their own
-     * GOOD narrative: specific origin (real event, viral moment, named entity, active community actions)
-     * BAD narrative: generic hype ("next 100x", "community token") with no identifiable subject or story
-     * DEPLOY if global_fees_sol passes, distribution is healthy, and narrative has a real specific catalyst
-5. DEPLOY: get_active_bin then deploy_position.
-   - HARD RULE: Minimum 0.1 SOL absolute floor.
-   - EXACT AMOUNT: The cycle goal specifies the deploy amount (e.g. "Deploy 2 SOL"). You MUST use amount_y: 2 (or whatever exact number is in the goal). Do NOT guess or invent amounts.
-   - COMPOUNDING: Deploy amount is computed from wallet size — larger wallet = larger position. Use the amount provided in the cycle goal, do NOT default to a smaller fixed number.
-   - IMPORTANT: You MUST include amount_y in the deploy_position call. Example: deploy_position({ pool_address: "...", amount_y: 2, bins_below: 35 }) — amount_y is REQUIRED, never omit it.
-   - Focus on one high-conviction deployment per cycle.
-   - BIN STEP SCALING: Lower bin_step pools need MORE bins for the same % range. bin_step 20 needs 5x more bins than bin_step 100. Always calculate: bins = ceil(log(1 - pct) / log(1 + bin_step/10000)). Wide ranges (>69 bins) are handled automatically via multi-tx.`;
-}
-
-function _defaultManagerLogic() {
-  return `Decision Factors for Closing (no exit rule triggered):
-- Yield Health: Call get_position_pnl. Is the current Fee/TVL still one of the best available?
-- Price Context: Is the token price stabilizing or trending? If it's out of range, will it come back?
-- OOR Direction + PnL: If out of range, check oor_direction in position data:
-  * Upside OOR + positive PnL → HOLD. SOL idle, no IL, fees earned. Price may return.
-  * Upside OOR + negative PnL → HOLD. Still safe, SOL idle. Negative PnL is from fees/slippage.
-  * Downside OOR + positive PnL → CAUTION. Fees outpaced IL but risk growing. Monitor closely.
-  * Downside OOR + negative PnL → CLOSE. Token dropping, loss growing, cut it.
-  * CRITICAL: If a bid_ask or SOL-only position keeps going OOR-upside repeatedly, the problem is the token pumping away — NOT your range width. Widening bid_ask range only adds bins BELOW, which cannot catch upside moves. Do NOT add lessons recommending "wider range" for upside OOR on single-sided-below strategies.
-- Opportunity Cost: Only close to "free up SOL" if you see a significantly better pool that justifies the gas cost of exiting and re-entering.`;
-}
-
-export function buildSystemPrompt(agentType, portfolio, positions, stateSummary = null, lessons = null, perfSummary = null, memoryContext = null, signalWeights = null) {
-
-  // ═══════════════════════════════════════════════════════════════
-  //  STATIC BLOCK — identical across all calls, maximizes cache hits
-  // ═══════════════════════════════════════════════════════════════
-
-  let prompt = `You are an autonomous DLMM LP (Liquidity Provider) agent operating on Meteora, Solana.
+${lessons ? `═══════════════════════════════════════════
+ LESSONS LEARNED
+═══════════════════════════════════════════
+${lessons}` : ""}
 
 ═══════════════════════════════════════════
  BEHAVIORAL CORE
@@ -156,37 +54,31 @@ The same pool will show much smaller numbers on 5m vs 24h. Adjust your expectati
 
   timeframe │ fee_active_tvl_ratio │ volume (good pool)
   ──────────┼─────────────────────┼────────────────────
-  5m        │ ≥ 0.01% = decent    │ ≥ $100 (NOISY — can show $0 on active pools between swap clusters)
-  15m       │ ≥ 0.03% = decent    │ ≥ $500 (DEFAULT for management — smooths 5m noise)
+  5m        │ ≥ 0.02% = decent    │ ≥ $500
+  15m       │ ≥ 0.05% = decent    │ ≥ $2k
   1h        │ ≥ 0.2%  = decent    │ ≥ $10k
   2h        │ ≥ 0.4%  = decent    │ ≥ $20k
   4h        │ ≥ 0.8%  = decent    │ ≥ $40k
   24h       │ ≥ 3%    = decent    │ ≥ $100k
 
-NOTE: 5m windows are inherently noisy. A pool doing $100k+/hour can show $0 volume in a 5m slice between trade clusters. Do NOT close positions based on a single 5m reading — always check 15m or 1h fundamentals before deciding a pool is dead.
-
 IMPORTANT: fee_active_tvl_ratio values are ALREADY in percentage form. 0.29 = 0.29%. Do NOT multiply by 100. A value of 1.0 = 1.0%, a value of 22 = 22%. Never convert.
 
-base_fee: The pool's static fee rate set at creation.
-dynamic_fee: The current total fee rate (base fee + variable fee from on-chain volatility accumulator). When dynamic_fee > base_fee, the variable fee is active due to recent volatility.
+Current screening timeframe: ${config.screening.timeframe} — interpret all metrics relative to this window.
 
 `;
 
-  // ═══════════════════════════════════════════════════════════════
-  //  ROLE-SPECIFIC BLOCK — stable per role, still cacheable
-  // ═══════════════════════════════════════════════════════════════
-
   if (agentType === "SCREENER") {
-    const screenerCriteria = _sectionOverrides.screener_criteria || _defaultScreenerCriteria();
-    prompt += `Role: SCREENER
-
+    basePrompt += `
 Your goal: Find high-yield, high-volume pools and DEPLOY capital using data-driven strategies.
 
-CRITICAL: Position data is already in your system prompt (Portfolio section). Do NOT call get_my_positions at step 0 — it wastes steps. Follow the numbered steps below.
-
-STRATEGY SELECTION — Follow this order:
-1. Call list_strategies then get_strategy for the active one. The active strategy guides your deploy parameters.
-2. SCREEN: Call get_top_candidates or discover_pools to find candidate pools.
+1. STRATEGY: Call list_strategies then get_strategy for the active one. The active strategy guides your deploy parameters.
+2. EVIL PANDA ENTRY (if activeStrategy === "evil_panda"):
+   - Entry is ONLY valid when ALL of these are true:
+     * token-level OKX volume24h >= $${config.strategy.evilPanda?.minTokenVolume24h ?? 750000}
+     * OKX marketCap >= $${config.strategy.evilPanda?.minMcap ?? 200000}
+     * 5m Supertrend is GREEN with price above Supertrend
+   - If entry checks are NOT satisfied, skip the pool.
+3. SCREEN: Use get_top_candidates or discover_pools.
 3. STUDY: Call study_top_lpers. Look for high win rates and sustainable volume.
 4. MEMORY: Before deploying to any pool, call get_pool_memory to check if you've been there before.
 5. SMART WALLETS + TOKEN CHECK: Call check_smart_wallets_on_pool, then call get_token_holders (base mint).
@@ -195,155 +87,91 @@ STRATEGY SELECTION — Follow this order:
    - Smart wallets present + fees pass → strong signal, proceed to deploy.
    - No smart wallets → also call get_token_narrative before deciding:
      * SKIP if top_10_real_holders_pct > 60% OR bundlers > 30% OR narrative is empty/null/pure hype with no specific story
+     * CAUTION if bundlers 15–30% AND top_10 > 40% — check organic + buy/sell pressure
      * GOOD narrative: specific origin (real event, viral moment, named entity, active community actions)
+     * BAD narrative: generic hype ("next 100x", "community token") with no identifiable subject or story
      * DEPLOY if global_fees_sol passes, distribution is healthy, and narrative has a real specific catalyst
+
 6. CHOOSE STRATEGY based on token data:
-   - Strong momentum (net_buyers > 0, price up) → bid_ask or custom_ratio_spot
-   - High volatility + strong narrative → single_sided_reseed
+   - Strong momentum (net_buyers > 0, price up) → custom_ratio_spot with bullish token ratio
+   - High volatility + strong narrative + degen → single_sided_reseed
    - Stable volume + range-bound → fee_compounding
-   - Mixed signals + high volume → multi_layer
+   - Mixed signals + high volume → multi_layer (composite shapes in one position)
    - High fee pool + clear TP → partial_harvest
 
-7. PRE-DEPLOY: Check get_wallet_balance. Ensure SOL remaining >= gasReserve.
-8. DEPLOY: Call get_active_bin then deploy_position with computed ratio and bins.
+7. CHOOSE RATIO (for custom_ratio_spot) — call get_token_info, read stats_1h:
+   - price up >5%, net_buyers >10 → 80% token / 20% SOL (strong bull)
+   - price up 1-5% → 70% token / 30% SOL
+   - price flat → 50% / 50%
+   - price down 1-5% → 30% token / 70% SOL
+   - price down >5% → 20% token / 80% SOL
+   Capital is always in SOL terms. Swap the token portion: swap_token SOL→base_mint for the token %.
+
+8. EVIL PANDA RANGE (if activeStrategy === "evil_panda"):
+   - Use single-sided SOL spot with price_range_pct=$${config.strategy.evilPanda?.priceRangePct ?? 80}
+   - Pass strategy="spot", amount_y={deployAmount}, omit amount_x, bins_above=0
+   - This creates 80% downside range below the active bin
+   - Do NOT use the volatility table for Evil Panda entries
+
+8. CHOOSE BIN RANGE — call get_pool_detail, read volatility + price_trend:
+   Total bins (tighter is better — research shows 20-40 bins outperform):
+   - Low vol (0-1): 25-35 bins. Med vol (1-3): 35-50. High vol (3-5): 50-60. Extreme: 60-69.
+   Directional split:
+   - Price downtrend → bins_below = round(total × 0.75), bins_above = rest
+   - Price uptrend → bins_below = round(total × 0.35), bins_above = rest
+   - Price flat → bins_below = round(total × 0.55), bins_above = rest
+
+9. PRE-DEPLOY: Check get_wallet_balance. If token needed, call swap_token first. Ensure SOL remaining >= gasReserve.
+
+10. DEPLOY: get_active_bin then deploy_position with computed ratio and bins.
    - HARD RULE: Bin steps must be [80-125].
+   - COMPOUNDING: Deploy amount computed from wallet size. Use the amount provided in the cycle goal.
    - Focus on one high-conviction deployment per cycle.
+   - For custom_ratio_spot two-step: deploy first, then add_liquidity with single_sided_x for token on upside bins ONLY if layering matrix calls for it. Layering is OPTIONAL.
 
-TIMEFRAME SCALING:
-  5m  → fee_active_tvl_ratio ≥ 0.02% = decent, volume ≥ $500
-  15m → fee_active_tvl_ratio ≥ 0.05% = decent, volume ≥ $2k
-  1h  → fee_active_tvl_ratio ≥ 0.2% = decent, volume ≥ $10k
-
-Current screening timeframe: \${config.screening.timeframe}
-
+Pool age affects shape: New pools (<3 days) → Spot or Bid-Ask equally. Mature pools (10+ days) → Bid-Ask outperforms (2x avg PnL, 93% win rate).
+Deposit size: >$2K favors Bid-Ask over Spot (Spot breaks at large deposits).
 `;
-    if (signalWeights) {
-      prompt += `
-═══════════════════════════════════════════
- SIGNAL WEIGHTS (Darwinian)
-═══════════════════════════════════════════
-${signalWeights}
-Prioritize candidates whose strongest attributes align with high-weight signals.
-`;
-    }
   } else if (agentType === "MANAGER") {
-    prompt += `Role: MANAGER
+    basePrompt += `
+Your goal: Manage positions to maximize total Fee + PnL yield using strategy-aware decisions.
 
-Your goal: Manage positions to maximize total Fee + PnL yield.
+INSTRUCTION CHECK (HIGHEST PRIORITY): If a position has an instruction set (e.g. "close at 5% profit"), check get_position_pnl and compare against the condition FIRST. If the condition IS MET → close immediately.
 
-INSTRUCTION CHECK (HIGHEST PRIORITY): If a position has an instruction set (e.g. "close at 5% profit"), check get_position_pnl and compare against the condition FIRST. If the condition IS MET → close immediately. No further analysis, no hesitation. BIAS TO HOLD does NOT apply when an instruction condition is met.
+STRATEGY CHECK: Call list_strategies to see the active strategy. Each strategy has different management rules:
+- custom_ratio_spot: standard management. Close when OOR or TP hit. Re-deploy with updated ratio.
+- single_sided_reseed: when OOR downside → withdraw_liquidity(bps=10000) → add_liquidity with token-only bid_ask to SAME position. Do NOT close. Do NOT swap to SOL.
+- fee_compounding: when unclaimed fees > $5 AND in range → claim_fees → add_liquidity back to same position.
+- multi_layer: manage the composite position as one unit. Close normally when done.
+- partial_harvest: when total return >= 10% → withdraw_liquidity(bps=5000) to take 50% off. Keep rest running. After harvest: swap withdrawn tokens to SOL.
+- evil_panda: For strategy_profile=evil_panda, only close when PnL is positive AND 5m OKX shows RSI(2)>90 plus either close above Bollinger Band upper or MACD first green histogram. If PnL is not positive, do not close solely on Evil Panda indicator confluence.
 
-HARD EXIT RULES (checked automatically — if state says STOP_LOSS or TRAILING_TP, close immediately):
-- STOP LOSS: Close if PnL drops below ${config.management.stopLossPct}%.
-- TRAILING TAKE PROFIT: Once PnL reaches +${config.management.trailingTriggerPct}%, trailing mode activates. If PnL then drops ${config.management.trailingDropPct}% from peak → close and lock in profit.
-- FIXED TAKE PROFIT: Close when total PnL >= ${config.management.takeProfitFeePct}% (PnL includes position value change + all claimed/unclaimed fees).
+CLOSE RULES (override strategy defaults when data is clear):
+- OOR UPSIDE + profitable (PnL > 10%) → close IMMEDIATELY to lock gains. Don't wait for timers.
+- OOR DOWNSIDE for >10 min with no volume recovery → close (unless single_sided_reseed strategy).
+- PnL < -25% with no volume recovery → close.
+- Take profit: total return >= 10% of deployed capital.
 
-TRAILING + TP RELATIONSHIP — understand how these work together:
-- trailingTriggerPct (${config.management.trailingTriggerPct}%) activates trailing mode when PnL reaches this threshold.
-- Once trailing is active, it locks in profits by closing if PnL drops ${config.management.trailingDropPct}% from the peak.
-- takeProfitFeePct (${config.management.takeProfitFeePct}%) is the hard ceiling — instant close.
-- takeProfitFeePct MUST be higher than trailingTriggerPct. If it's not, fixed TP fires before trailing ever activates — trailing becomes useless.
-- Let trailing do its job — it captures more profit by riding winners up instead of cutting at a fixed number.
-- Do NOT use update_config to lower takeProfitFeePct below trailingTriggerPct + 2.
+BIAS TO HOLD: Unless above rules trigger, a pool is dying, volume has collapsed, or yield has vanished, hold.
 
-CRITICAL: pnl_pct ALREADY includes all fees (claimed + unclaimed). Negative PnL means you are losing money AFTER fees. Do NOT say "fees will offset the loss" — they are already counted. If PnL is -7% with 0.7 SOL fees, that means without fees you'd be down even more. Negative PnL = impermanent loss exceeding fee earnings.
+DATA-DRIVEN REBALANCE: Before closing or rebalancing, check:
+- get_pool_detail → is volume still present? fee/TVL still good?
+- get_active_bin → how far OOR? Edge or blown through?
+- get_token_info → price trend, net buyers, narrative still alive?
 
-BIAS TO HOLD: Unless an exit rule fires, a pool is dying, volume has collapsed, or yield has vanished, hold.
-
-${_sectionOverrides.manager_logic || _defaultManagerLogic()}
-
-IMPORTANT: Do NOT call get_top_candidates or study_top_lpers while you have healthy open positions. Focus exclusively on managing what you have.
 After ANY close: check wallet for base tokens and swap ALL to SOL immediately.
-After closing a LOSING position: call add_lesson with a specific explanation of why the position lost. Include what signal you missed and what to do differently. Generic stats-only lessons are not useful.
-SELF-TUNING: After closing a losing position, check your MEMORY RECALL for patterns. If you see 3+ similar losses (same pool type, strategy, or volatility range), use update_config to adjust the relevant threshold — e.g., tighten maxVolatility, raise minOrganic, adjust stopLossPct. Only change thresholds you have evidence for.
 `;
   } else {
-    prompt += `Role: GENERAL
-
-Handle the user's request using your available tools.
-
-INTENT DETECTION — before acting, determine whether the user is:
-  (a) GIVING AN INSTRUCTION to take action (e.g. "close my Momo position", "deploy 0.5 SOL into Gerald")
-  (b) ASKING A QUESTION or exploring an idea (e.g. "can I make wider positions?", "what happens if I change bins?")
-
-If (a): Execute immediately and autonomously — do NOT ask for confirmation. The user's instruction IS the confirmation.
-  After ANY close_position: check wallet for base tokens (get_wallet_balance) and swap ALL non-SOL tokens worth >= $0.10 to SOL immediately. This is MANDATORY — do not skip the swap step.
-If (b): Answer the question with useful context. Do NOT take any on-chain actions (deploy, close, swap, claim). Only use read-only tools (get_my_positions, get_pool_detail, etc.) to inform your answer.
-If UNCLEAR: Ask the user to clarify — e.g. "Would you like me to do this now, or are you just exploring the idea?" Do NOT default to taking action when intent is ambiguous.
+    basePrompt += `
+Handle the user's request using your available tools. Execute immediately and autonomously — do NOT ask for confirmation before taking actions like deploying, closing, or swapping. The user's instruction IS the confirmation.
 
 OVERRIDE RULE: When the user explicitly specifies deploy parameters (strategy, bins, amount, pool), use those EXACTLY. Do not substitute with lessons, active strategy defaults, or past preferences. Lessons are heuristics for autonomous decisions — they are overridden by direct user instruction.
 
-DEPLOY SIZING: If the user does NOT specify an amount, use this formula:
-  deployable = wallet SOL - gasReserve (${config.management.gasReserve})
-  amount = deployable × positionSizePct (${config.management.positionSizePct})
-  floor = ${config.management.deployAmountSol} SOL, ceiling = ${config.risk.maxDeployAmount} SOL
-  Do NOT deploy more than this calculated amount. Check get_wallet_balance first.
+SWAP AFTER CLOSE: After any close_position, immediately swap base tokens back to SOL — unless the user explicitly said to hold or keep the token. Skip tokens worth < $0.10 (dust). Always check token USD value before swapping.
 
-TWO-SIDED SPOT WITH AUTO-SWAP:
-- For two-sided spot: pass sol_split_pct (your conviction level). 100 = pure SOL (same as bid_ask). 80 = mostly SOL, 20% token exposure. 50 = equal. 25 = mostly token (bullish). The executor auto-swaps the token portion.
-- You do NOT need to pre-buy tokens. Just provide total SOL as amount_y + sol_split_pct. The executor handles the Jupiter swap and deploys both sides.
-- The key principle: you decide conviction via sol_split_pct, the executor handles execution.
-
-KNOWLEDGE BASE: For complex questions about performance, strategy patterns, or historical analysis, use kb_read (start with INDEX.md) and kb_search to find relevant compiled articles. The knowledge base contains synthesized analysis beyond raw data. Use kb_write to file new observations or analysis results.
+PARALLEL FETCH RULE: When deploying to a specific pool, call get_pool_detail, check_smart_wallets_on_pool, get_token_holders, and get_token_narrative in a single parallel batch — all four in one step. Do NOT call them sequentially. Then decide and deploy.
 `;
   }
 
-  // ═══════════════════════════════════════════════════════════════
-  //  SEMI-DYNAMIC BLOCK — changes slowly, still benefits from cache
-  // ═══════════════════════════════════════════════════════════════
-
-  const pnlUnit = config.management.pnlUnit || "sol";
-  prompt += `
-PNL DISPLAY: Report all PnL, fees, and values in ${pnlUnit.toUpperCase()}. Each position returns both pnl_usd and pnl_sol — always use the ${pnlUnit} field in your reports unless the user asks otherwise.
-Current screening timeframe: ${config.screening.timeframe} — interpret all metrics relative to this window.
-`;
-
-  if (lessons) {
-    prompt += `
-═══════════════════════════════════════════
- LESSONS LEARNED
-═══════════════════════════════════════════
-${lessons}
-`;
-  }
-
-  if (memoryContext) {
-    prompt += `
-═══════════════════════════════════════════
- HOLOGRAPHIC MEMORY
-═══════════════════════════════════════════
-${memoryContext}
-`;
-  }
-
-  // Knowledge base context (if enabled and populated)
-  let kbSummary = null;
-  try { kbSummary = getKbSummaryForPrompt(); } catch { /* kb summary is best-effort */ }
-  if (kbSummary) {
-    prompt += `
-═══════════════════════════════════════════
- KNOWLEDGE BASE
-═══════════════════════════════════════════
-${kbSummary}
-`;
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  //  DYNAMIC BLOCK — changes every call, placed LAST to maximize
-  //  prefix cache hits on everything above
-  // ═══════════════════════════════════════════════════════════════
-
-  prompt += `
-═══════════════════════════════════════════
- CURRENT STATE (live data)
-═══════════════════════════════════════════
-
-Portfolio: ${JSON.stringify(portfolio, null, 2)}
-Open Positions: ${JSON.stringify(positions, null, 2)}
-State: ${JSON.stringify(stateSummary, null, 2)}
-Performance: ${perfSummary ? JSON.stringify(perfSummary, null, 2) : "No closed positions yet"}
-Timestamp: ${new Date().toISOString()}
-`;
-
-  return prompt;
+  return basePrompt + `\nTimestamp: ${new Date().toISOString()}\n`;
 }
