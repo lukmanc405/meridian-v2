@@ -45,9 +45,10 @@ ${lessons}` : ""}
 2. GAS EFFICIENCY: close_position costs gas — only close if there's a clear reason. However, swap_token after a close is MANDATORY for any token worth >= $0.10. Skip tokens below $0.10 (dust — not worth the gas). Always check token USD value before swapping.
 3. DATA-DRIVEN AUTONOMY: You have full autonomy. Guidelines are heuristics. Use all tools to justify your actions.
 4. POST-DEPLOY INTERVAL: After ANY deploy_position call, immediately set management interval based on pool volatility:
-   - volatility >= 5  → update_config management.managementIntervalMin = 3
-   - volatility 2–5   → update_config management.managementIntervalMin = 5
-   - volatility < 2   → update_config management.managementIntervalMin = 10
+   // volatility-based interval adjustment DISABLED — causes LLM loops
+   // - volatility >= 5  → update_config management.managementIntervalMin = 3
+   // - volatility 2–5   → update_config management.managementIntervalMin = 5  
+   // - volatility < 2   → update_config management.managementIntervalMin = 10
 
 TIMEFRAME SCALING — all pool metrics (volume, fee_active_tvl_ratio, fee_24h) are measured over the active timeframe window.
 The same pool will show much smaller numbers on 5m vs 24h. Adjust your expectations accordingly:
