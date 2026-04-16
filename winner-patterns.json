@@ -49,8 +49,8 @@
       "total": 4
     },
     "15": {
-      "wins": 2,
-      "total": 2
+      "wins": 4,
+      "total": 4
     },
     "16": {
       "wins": 5,
@@ -103,8 +103,8 @@
       "total": 1
     },
     "40": {
-      "wins": 2,
-      "total": 2
+      "wins": 3,
+      "total": 3
     },
     "50": {
       "wins": 5,
@@ -119,8 +119,8 @@
       "total": 7
     },
     "80": {
-      "wins": 10,
-      "total": 10
+      "wins": 11,
+      "total": 11
     },
     "90": {
       "wins": 1,
@@ -133,8 +133,8 @@
   },
   "byFeeYield": {
     "0": {
-      "wins": 52,
-      "total": 52
+      "wins": 54,
+      "total": 54
     },
     "5": {
       "wins": 7,
@@ -272,24 +272,6 @@
     }
   ],
   "recentWins": [
-    {
-      "pair": "ALONSHOUSE-SOL",
-      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
-      "pnlPct": 9.41,
-      "age": 49,
-      "tirPercent": 100,
-      "feeYield": 0,
-      "timestamp": "2026-04-12T11:40:27.135Z"
-    },
-    {
-      "pair": "ALONSHOUSE-SOL",
-      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
-      "pnlPct": 0.86,
-      "age": 19,
-      "tirPercent": 52.6,
-      "feeYield": 0,
-      "timestamp": "2026-04-12T12:40:18.971Z"
-    },
     {
       "pair": "ALONSHOUSE-SOL",
       "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
@@ -721,6 +703,24 @@
       "tirPercent": 70,
       "feeYield": 0,
       "timestamp": "2026-04-16T14:43:51.502Z"
+    },
+    {
+      "pair": "Neukgu-SOL",
+      "poolAddress": "F5bLzDAhcnXnaXSX7dGP2yLU3G6NC56Ao5W9EjJX3Be8",
+      "pnlPct": 1.92,
+      "age": 25,
+      "tirPercent": 88,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T15:09:59.909Z"
+    },
+    {
+      "pair": "Neukgu-SOL",
+      "poolAddress": "F5bLzDAhcnXnaXSX7dGP2yLU3G6NC56Ao5W9EjJX3Be8",
+      "pnlPct": 0.13,
+      "age": 5,
+      "tirPercent": 40,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T15:18:12.523Z"
     }
   ]
 }

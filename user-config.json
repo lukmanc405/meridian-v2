@@ -1,9 +1,9 @@
 {
-  "screeningModel": "qwen/qwen-plus",
+  "screeningModel": "deepseek/deepseek-v3",
   "screeningFallbackModel": "openai/gpt-4o",
-  "managementModel": "qwen/qwen-plus",
+  "managementModel": "deepseek/deepseek-v3",
   "managementFallbackModel": "openai/gpt-4o",
-  "generalModel": "qwen/qwen-plus",
+  "generalModel": "deepseek/deepseek-v3",
   "generalFallbackModel": "openai/gpt-4o",
   "managementIntervalMin": 3,
   "screeningIntervalMin": 45,
