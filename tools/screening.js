@@ -203,12 +203,12 @@ export async function getTopCandidates({ limit = 10 } = {}) {
       const { adv, price, clusters, risk } = r.value;
       
       // Evil Panda indicators (only fetch if using evil_panda strategy)
-      if (config.strategy?.activeStrategy === "evil_panda" && p.base?.mint) {
-        const evilPanda = await getEvilPandaIndicators(p.base.mint);
+      if (config.strategy?.activeStrategy === "evil_panda" && eligible[i].base?.mint) {
+        const evilPanda = await getEvilPandaIndicators(eligible[i].base.mint);
         if (evilPanda && !evilPanda.error) {
           eligible[i].evil_panda = evilPanda;
           eligible[i].evil_panda_entry_ok = evilPanda.evil_panda_entry_ok;
-          log("okx", `${p.name}: Evil Panda — supertrend_${evilPanda.supertrend_direction}, rsi_2=${evilPanda.rsi_2}, entry_ok=${evilPanda.evil_panda_entry_ok}`);
+          log("okx", `${eligible[i].name}: Evil Panda — supertrend_${evilPanda.supertrend_direction}, rsi_2=${evilPanda.rsi_2}, entry_ok=${evilPanda.evil_panda_entry_ok}`);
         }
       }
       

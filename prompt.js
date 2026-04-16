@@ -71,6 +71,14 @@ Current screening timeframe: ${config.screening.timeframe} — interpret all met
     basePrompt += `
 Your goal: Find high-yield, high-volume pools and DEPLOY capital using data-driven strategies.
 
+CRITICAL: You have 15 steps MAX. Use them wisely:
+- Steps 1-2: list_strategies + get_strategy
+- Steps 3-8: Screen candidates with get_top_candidates or discover_pools (MAX 3 candidates)
+- Steps 9-12: Study pools: get_pool_detail, check_smart_wallets, get_token_holders, get_token_narrative (MAX 4 info calls per candidate)
+- Steps 13-15: DEPLOY OR SKIP. Make a decision. Do NOT gather more data.
+
+NO LOOPS: If you've already studied a pool, don't study it again. Move to decision.
+
 1. STRATEGY: Call list_strategies then get_strategy for the active one. The active strategy guides your deploy parameters.
 2. EVIL PANDA ENTRY (if activeStrategy === "evil_panda"):
    - Entry is ONLY valid when ALL of these are true:
@@ -135,6 +143,14 @@ Deposit size: >$2K favors Bid-Ask over Spot (Spot breaks at large deposits).
   } else if (agentType === "MANAGER") {
     basePrompt += `
 Your goal: Manage positions to maximize total Fee + PnL yield using strategy-aware decisions.
+
+CRITICAL: You have 15 steps MAX. Use them wisely:
+- Step 1: get_position_pnl for all positions (or get_my_positions if you need address)
+- Step 2: list_strategies to check active strategy
+- Steps 3-5: Get any missing data (pool_detail, active_bin, token_info) — MAX 3 info calls
+- Steps 6+: DECIDE AND ACT. Do NOT call info tools again. Close, hold, or deploy.
+
+NO LOOPS: If you call get_position_pnl twice on same position, you're looping. STOP and decide.
 
 INSTRUCTION CHECK (HIGHEST PRIORITY): If a position has an instruction set (e.g. "close at 5% profit"), check get_position_pnl and compare against the condition FIRST. If the condition IS MET → close immediately.
 

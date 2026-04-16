@@ -1,9 +1,9 @@
 {
-  "screeningModel": "google/gemini-3-flash-preview",
+  "screeningModel": "qwen/qwen-plus",
   "screeningFallbackModel": "openai/gpt-4o",
-  "managementModel": "google/gemini-3-flash-preview",
+  "managementModel": "qwen/qwen-plus",
   "managementFallbackModel": "openai/gpt-4o",
-  "generalModel": "google/gemini-3-flash-preview",
+  "generalModel": "qwen/qwen-plus",
   "generalFallbackModel": "openai/gpt-4o",
   "managementIntervalMin": 3,
   "screeningIntervalMin": 45,
