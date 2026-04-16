@@ -703,7 +703,7 @@ STEPS:
    <If OKX enrichment is missing, write exactly: OKX: unavailable>
 
    WHY THIS WON
-   <2-4 concise sentences on why this pool won and why the chosen strategy fits>
+   <2-4 sentences. Ground each claim in SPECIFIC data points from above (e.g. "Fee/TVL 0.5% exceeds our 0.3% threshold", "Top10 at 15% shows healthy distribution", "2 smart wallets confirm smart money interest", "Bots at 18% is acceptable given fees paid 627 SOL"). Link strategy choice to data (e.g. "spot chosen because volatility 0.8 < 3.0 threshold", "wide range justified by mature pool age 1129h"). Be precise, not vague.>
 8. If no pool qualifies, report in this exact format instead:
    ⛔ NO DEPLOY
 
@@ -713,7 +713,7 @@ STEPS:
    <name or none>
 
    WHY SKIPPED
-   <2-4 concise sentences explaining why nothing was good enough>
+   <2-4 sentences. List specific failing metrics (e.g. "Fee/TVL 0.1% below our 0.3% minimum", "Top10 holders at 72% signals concentration risk", "volume $2K below $5K threshold", "no smart money presence"). Be precise about which threshold failed and by how much.>
 
    REJECTED
    <short flat list of top candidate names and why they were skipped>

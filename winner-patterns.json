@@ -41,8 +41,8 @@
       "total": 2
     },
     "13": {
-      "wins": 5,
-      "total": 5
+      "wins": 8,
+      "total": 8
     },
     "14": {
       "wins": 2,
@@ -95,20 +95,20 @@
       "total": 2
     },
     "20": {
-      "wins": 3,
-      "total": 3
+      "wins": 4,
+      "total": 4
     },
     "40": {
       "wins": 2,
       "total": 2
     },
     "50": {
-      "wins": 3,
-      "total": 3
+      "wins": 4,
+      "total": 4
     },
     "60": {
-      "wins": 5,
-      "total": 5
+      "wins": 6,
+      "total": 6
     },
     "70": {
       "wins": 5,
@@ -129,8 +129,8 @@
   },
   "byFeeYield": {
     "0": {
-      "wins": 43,
-      "total": 43
+      "wins": 46,
+      "total": 46
     },
     "5": {
       "wins": 7,
@@ -200,6 +200,27 @@
       "age": 4,
       "tirPercent": 75,
       "timestamp": "2026-04-16T09:03:15.686Z"
+    },
+    {
+      "pair": "YOLO-SOL",
+      "pnlPct": 0.39,
+      "age": 3,
+      "tirPercent": 66.7,
+      "timestamp": "2026-04-16T13:09:03.169Z"
+    },
+    {
+      "pair": "unt-SOL",
+      "pnlPct": 0.07,
+      "age": 4,
+      "tirPercent": 25,
+      "timestamp": "2026-04-16T13:13:19.141Z"
+    },
+    {
+      "pair": "unt-SOL",
+      "pnlPct": 0.26,
+      "age": 2,
+      "tirPercent": 50,
+      "timestamp": "2026-04-16T13:18:19.748Z"
     }
   ],
   "bigWins": [
@@ -240,33 +261,6 @@
     }
   ],
   "recentWins": [
-    {
-      "pair": "HRSwLqNp",
-      "poolAddress": "HRSwLqNpd4ZfuD6HsTFpdS2nuEGPmHvZqvcQP1RKGkxM",
-      "pnlPct": 16.13,
-      "age": 10,
-      "tirPercent": 80,
-      "feeYield": 5,
-      "timestamp": "2026-04-06T21:30:20.234Z"
-    },
-    {
-      "pair": "CSp21LA8",
-      "poolAddress": "CSp21LA8uzJGLAVJ64UzGNLqnfzEx6DycXvgDZyAhGib",
-      "pnlPct": 49.37,
-      "age": 1,
-      "tirPercent": 80,
-      "feeYield": 5,
-      "timestamp": "2026-04-07T16:30:19.167Z"
-    },
-    {
-      "pair": "CSp21LA8",
-      "poolAddress": "CSp21LA8uzJGLAVJ64UzGNLqnfzEx6DycXvgDZyAhGib",
-      "pnlPct": 93.15,
-      "age": 1,
-      "tirPercent": 80,
-      "feeYield": 5,
-      "timestamp": "2026-04-07T16:36:23.570Z"
-    },
     {
       "pair": "6o4pSTHC",
       "poolAddress": "6o4pSTHCd5awQhu3bqWkt49NCfZg6s5vgNrMpBY495r9",
@@ -689,6 +683,33 @@
       "tirPercent": 40,
       "feeYield": 0,
       "timestamp": "2026-04-16T12:56:48.925Z"
+    },
+    {
+      "pair": "YOLO-SOL",
+      "poolAddress": "F1WdKXnZSTsS6ShGZi6ptAzcMAWRV6z95xFPtQxwMWCg",
+      "pnlPct": 0.39,
+      "age": 3,
+      "tirPercent": 66.7,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T13:09:03.169Z"
+    },
+    {
+      "pair": "unt-SOL",
+      "poolAddress": "4jdavcjEpqnyS733CYtDx2CM7wzeeqoFWZbbXZSuoUNw",
+      "pnlPct": 0.07,
+      "age": 4,
+      "tirPercent": 25,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T13:13:19.141Z"
+    },
+    {
+      "pair": "unt-SOL",
+      "poolAddress": "4jdavcjEpqnyS733CYtDx2CM7wzeeqoFWZbbXZSuoUNw",
+      "pnlPct": 0.26,
+      "age": 2,
+      "tirPercent": 50,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T13:18:19.748Z"
     }
   ]
 }
