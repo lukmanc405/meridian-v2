@@ -1,0 +1,64 @@
+{
+  "id": "lesson_wallet11_pattern_2026-04-16",
+  "created_at": "2026-04-16T02:34:00.000Z",
+  "source": "smart_wallet_analysis",
+  "wallet_address": "3TXwWEwRUAHitwn8agS7pttqRvY6qrftn13ZuEceMfFM",
+  "wallet_name": "LP Agent Smart LP #11",
+  "pattern": {
+    "avg_hold_minutes": 1.9,
+    "win_rate": 0.835,
+    "total_fees_30d": 219.85,
+    "style": "high_frequency_fast_exit"
+  },
+  "description": "Wallet #11 is the highest fee earner (219 SOL in 30d) with fast-trading style. Average hold only 1.9 hours, suggesting quick entry/exit strategy. Win rate 83.5% indicates strong pool selection.",
+  "lessons": [
+    {
+      "id": "fast_entry_exit",
+      "title": "Fast Entry/Exit Strategy",
+      "content": "Top performers by fees hold < 1 hour. Examples: unc-SOL (19m, $17.60 fees, +12% PnL), ALONSHOUSE-SOL (49m, $17.45 fees, +9.4% PnL), Peepa-SOL (39m, $13.74 fees, +0.6% PnL). Fast trades capture fees without long IL exposure.",
+      "action": "Prefer quick-exit strategy. Target 30-60 min holds. Don't hold hoping for more — take fees and move.",
+      "priority": "high"
+    },
+    {
+      "id": "bin_count_50",
+      "title": "50 Bins Has Best Win Rate (69%)",
+      "content": "Historical analysis: bins_below=50 has 69% win rate +0.63% avg PnL. bins_below=35 is popular (47 trades) but only 57% win rate. bins_below=64 has high PnL (4.1%) but rare. bins_below=31 and 42 also 100% win rate but low sample.",
+      "action": "Default to 50 bins for spot strategy. Safe middle ground with good win rate. Use 35 only when short on time or high conviction.",
+      "priority": "high"
+    },
+    {
+      "id": "repeat_pools",
+      "title": "Repeat on Good Pools",
+      "content": "Some pools repeat in top performers: Iroha-SOL (4x), unc-SOL (2x), GENZ-SOL (2x). Good pools get revisited by smart money. If a pool already paid out once, likely to pay again.",
+      "action": "Check pool-memory for past performance. If pool has history of positive PnL for others, strong signal to deploy.",
+      "priority": "medium"
+    },
+    {
+      "id": "bid_ask_fast",
+      "title": "BidAsk Works for Fast Trades Too",
+      "content": "Peepa-SOL: bid_ask strategy, 39m hold, $13.74 fees, +0.6% PnL. GENZ-SOL: bid_ask, 103m hold, $8.31 fees, +0.12% PnL. BidAsk isn't just for slow compounding — can work for fast mode too.",
+      "action": "Use bid_ask for fast trades when volatility is high or direction is unclear. Spot when confident token will pump.",
+      "priority": "medium"
+    }
+  ],
+  "metrics": {
+    "total_trades_analyzed": 106,
+    "fast_trades": 87,
+    "fast_trade_win_rate": 0.598,
+    "fast_trade_avg_fees": 3.18,
+    "best_trades_by_fees": [
+      {"pool": "unc-SOL", "fees": 17.60, "pnl_pct": 12.22, "hold_mins": 19, "bins": 35},
+      {"pool": "ALONSHOUSE-SOL", "fees": 17.45, "pnl_pct": 9.41, "hold_mins": 49, "bins": 64},
+      {"pool": "Iroha-SOL", "fees": 16.27, "pnl_pct": 1.12, "hold_mins": 458, "bins": 59},
+      {"pool": "Peepa-SOL", "fees": 13.74, "pnl_pct": 0.59, "hold_mins": 39, "bins": 35},
+      {"pool": "unc-SOL", "fees": 13.15, "pnl_pct": -1.73, "hold_mins": 48, "bins": 45}
+    ]
+  },
+  "strategy_settings": {
+    "recommend_bins_below": 50,
+    "recommend_hold_max": 60,
+    "recommend_strategy": "spot_or_bid_ask",
+    "min_token_fees_sol": 30,
+    "min_organic": 65
+  }
+}
