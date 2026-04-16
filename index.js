@@ -477,20 +477,17 @@ export async function runScreeningCycle({ silent = false } = {}) {
     const allCandidates = [];
     for (const pool of candidates) {
       const mint = pool.base?.mint;
-      const [smartWallets, narrative, tokenInfo, activeBinResult] = await Promise.allSettled([
+      const [smartWallets, narrative, tokenInfo] = await Promise.allSettled([
         checkSmartWalletsOnPool({ pool_address: pool.pool }),
         mint ? getTokenNarrative({ mint }) : Promise.resolve(null),
         mint ? getTokenInfo({ query: mint }) : Promise.resolve(null),
-        getActiveBin({ pool_address: pool.pool }),
       ]);
       const tokenInfoResult = tokenInfo.status === "fulfilled" ? tokenInfo.value?.results?.[0] : null;
-      const activeBin = activeBinResult.status === "fulfilled" ? activeBinResult.value?.binId : null;
       allCandidates.push({
         pool,
         sw: smartWallets.status === "fulfilled" ? smartWallets.value : null,
         n: narrative.status === "fulfilled" ? narrative.value : null,
         ti: tokenInfoResult,
-        activeBin,
         mem: recallForPool(pool.pool),
       });
       // Compute bins_below using dynamic formula (yunus-0x style)
@@ -560,8 +557,21 @@ export async function runScreeningCycle({ silent = false } = {}) {
       return screenReport;
     }
 
+    // Pre-fetch active_bin only for top 3 candidates (avoid 429s from too many parallel calls)
+    const top3 = passing.slice(0, Math.min(3, passing.length));
+    const activeBinResults = await Promise.allSettled(
+      top3.map(({ pool }) => getActiveBin({ pool_address: pool.pool }))
+    );
+    for (let i = 0; i < top3.length; i++) {
+      if (activeBinResults[i]?.status === "fulfilled") {
+        top3[i].activeBin = activeBinResults[i].value?.binId ?? null;
+      }
+    }
+
     // Build compact candidate blocks
-    const candidateBlocks = passing.map(({ pool, sw, n, ti, activeBin, mem }, i) => {
+    const candidateBlocks = passing.map((c, i) => {
+      const { pool, sw, n, ti, mem } = c;
+      const activeBin = c.activeBin ?? null;
       const botPct = ti?.audit?.bot_holders_pct ?? "?";
       const top10Pct = ti?.audit?.top_holders_pct ?? "?";
       const feesSol = ti?.global_fees_sol ?? "?";
