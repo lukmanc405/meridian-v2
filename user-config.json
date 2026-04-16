@@ -1,7 +1,7 @@
 {
-  "screeningModel": "anthropic/claude-sonnet-4-5",
-  "managementModel": "anthropic/claude-sonnet-4-5",
-  "generalModel": "anthropic/claude-sonnet-4-5",
+  "screeningModel": "google/gemini-3-flash-preview",
+  "managementModel": "google/gemini-3-flash-preview",
+  "generalModel": "google/gemini-3-flash-preview",
   "managementIntervalMin": 3,
   "screeningIntervalMin": 45,
   "deployAmountSol": 2,
