@@ -1,7 +1,10 @@
 {
   "screeningModel": "google/gemini-3-flash-preview",
+  "screeningFallbackModel": "openai/gpt-4o",
   "managementModel": "google/gemini-3-flash-preview",
+  "managementFallbackModel": "openai/gpt-4o",
   "generalModel": "google/gemini-3-flash-preview",
+  "generalFallbackModel": "openai/gpt-4o",
   "managementIntervalMin": 3,
   "screeningIntervalMin": 45,
   "deployAmountSol": 2,
