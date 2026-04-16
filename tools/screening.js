@@ -36,11 +36,11 @@ export async function discoverPools({
     "quote_token_organic_score>=60",
   ].filter(Boolean).join("&&");
 
-  const url = `${POOL_DISCOVERY_BASE}/pools?` +
+  let url = `${POOL_DISCOVERY_BASE}/pools?` +
     `page_size=${page_size}` +
     `&filter_by=${encodeURIComponent(filters)}` +
-    `&timeframe=${s.timeframe}` +
-    `&category=${s.category}`;
+    `&timeframe=${s.timeframe}`;
+  if (s.category) url += `&category=${s.category}`;
 
   const res = await fetch(url);
 
