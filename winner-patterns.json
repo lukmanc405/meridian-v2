@@ -25,12 +25,12 @@
       "total": 3
     },
     "8": {
-      "wins": 1,
-      "total": 1
-    },
-    "9": {
       "wins": 2,
       "total": 2
+    },
+    "9": {
+      "wins": 3,
+      "total": 3
     },
     "11": {
       "wins": 3,
@@ -103,16 +103,16 @@
       "total": 1
     },
     "50": {
-      "wins": 2,
-      "total": 2
+      "wins": 3,
+      "total": 3
     },
     "60": {
       "wins": 5,
       "total": 5
     },
     "70": {
-      "wins": 4,
-      "total": 4
+      "wins": 5,
+      "total": 5
     },
     "80": {
       "wins": 9,
@@ -129,8 +129,8 @@
   },
   "byFeeYield": {
     "0": {
-      "wins": 40,
-      "total": 40
+      "wins": 42,
+      "total": 42
     },
     "5": {
       "wins": 7,
@@ -186,6 +186,20 @@
       "age": 2,
       "tirPercent": 100,
       "timestamp": "2026-04-16T06:09:17.621Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "pnlPct": 0.03,
+      "age": 2,
+      "tirPercent": 50,
+      "timestamp": "2026-04-16T08:57:11.168Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "pnlPct": 0.26,
+      "age": 4,
+      "tirPercent": 75,
+      "timestamp": "2026-04-16T09:03:15.686Z"
     }
   ],
   "bigWins": [
@@ -648,6 +662,24 @@
       "tirPercent": 62.5,
       "feeYield": 0,
       "timestamp": "2026-04-16T08:50:28.041Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "poolAddress": "gAyCDR69Pj9WfHXtqGbSRomGV8gYef1BWYh87bmgaYN",
+      "pnlPct": 0.03,
+      "age": 2,
+      "tirPercent": 50,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T08:57:11.168Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "poolAddress": "gAyCDR69Pj9WfHXtqGbSRomGV8gYef1BWYh87bmgaYN",
+      "pnlPct": 0.26,
+      "age": 4,
+      "tirPercent": 75,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T09:03:15.686Z"
     }
   ]
 }

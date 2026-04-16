@@ -41,7 +41,7 @@
   "evilPandaMinTokenVolume24h": 750000,
   "evilPandaMinMcap": 200000,
   "evilPandaPriceRangePct": 80,
-  "autoRegisterTelegram": true,
+  "telegramChatId": "630703015",
   "darwin": {
     "enabled": true
   },
