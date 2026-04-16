@@ -12,7 +12,7 @@
   "maxDeployAmount": 2,
   "gasReserve": 0.1,
   "minSolToOpen": 1.5,
-  "maxPositions": 1,
+  "maxPositions": 2,
   "outOfRangeWaitMinutes": 3,
   "maxHoldMinutes": 180,
   "stopLossPct": -5,
