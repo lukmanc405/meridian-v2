@@ -667,7 +667,10 @@ STEPS:
    - SLOW COMPOUND: PnL > +15% OR IL > -10% → exit. NEVER exit before 4h.
    - BidAsk: PnL > +5% OR price exits range → exit. Min hold 1h.
    - CRITICAL: Never use 70+ bins. 31-50 bins outperform every time.
-6. Deposit: ${deployAmount} SOL per position. Use exactly this amount — do not adjust.
+6. DEPLOY CALL — You MUST include amount_y in deploy_position tool call:
+   - Example: deploy_position({ pool_address: "...", amount_y: 2, strategy: "bid_ask", bins_below: 35 })
+   - NEVER call deploy_position without amount_y. This is the most critical parameter.
+   - Deposit: ${deployAmount} SOL per position. Use exactly this amount — do not adjust.
 7. Report in this exact format (no tables, no extra sections):
    🚀 DEPLOYED
 
@@ -746,7 +749,7 @@ export function startCronJobs() {
     await runManagementCycle();
   });
 
-  const screenTask = cron.schedule(`*/${Math.max(1, config.schedule.screeningIntervalMin)} * * * *`, runScreeningCycle);
+  const screenTask = cron.schedule("15,30,45 * * * *", runScreeningCycle);
 
   const healthTask = cron.schedule(`0 * * * *`, async () => {
     if (_managementBusy) return;

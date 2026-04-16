@@ -110,8 +110,10 @@ function _defaultScreenerCriteria() {
      * BAD narrative: generic hype ("next 100x", "community token") with no identifiable subject or story
      * DEPLOY if global_fees_sol passes, distribution is healthy, and narrative has a real specific catalyst
 5. DEPLOY: get_active_bin then deploy_position.
-   - HARD RULE: Minimum 0.1 SOL absolute floor (prefer 0.5+).
+   - HARD RULE: Minimum 0.1 SOL absolute floor.
+   - EXACT AMOUNT: The cycle goal specifies the deploy amount (e.g. "Deploy 2 SOL"). You MUST use amount_y: 2 (or whatever exact number is in the goal). Do NOT guess or invent amounts.
    - COMPOUNDING: Deploy amount is computed from wallet size — larger wallet = larger position. Use the amount provided in the cycle goal, do NOT default to a smaller fixed number.
+   - IMPORTANT: You MUST include amount_y in the deploy_position call. Example: deploy_position({ pool_address: "...", amount_y: 2, bins_below: 35 }) — amount_y is REQUIRED, never omit it.
    - Focus on one high-conviction deployment per cycle.
    - BIN STEP SCALING: Lower bin_step pools need MORE bins for the same % range. bin_step 20 needs 5x more bins than bin_step 100. Always calculate: bins = ceil(log(1 - pct) / log(1 + bin_step/10000)). Wide ranges (>69 bins) are handled automatically via multi-tx.`;
 }
