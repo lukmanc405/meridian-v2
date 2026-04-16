@@ -3,6 +3,7 @@ import { isBlacklisted } from "../token-blacklist.js";
 import { isDevBlocked, getBlockedDevs } from "../dev-blocklist.js";
 import { log } from "../logger.js";
 import { isBaseMintOnCooldown, isPoolOnCooldown } from "../pool-memory.js";
+import { getTrendingPools, getSmartMoneyScore } from "./gmgn.js";
 
 const DATAPI_JUP = "https://datapi.jup.ag/v1";
 
@@ -265,6 +266,31 @@ export async function getTopCandidates({ limit = 10 } = {}) {
     });
     eligible.splice(0, eligible.length, ...filtered);
     if (eligible.length < before) log("dev_blocklist", `Filtered ${before - eligible.length} pool(s) via OKX creator check`);
+
+  // NEW: Hive Mind Layer — enrich with GMGN smart money signals
+  if (eligible.length > 0 && config.screening.useGmgnHiveMind) {
+    try {
+      const gmgnPools = await getTrendingPools({ interval: "1h", limit: 50, minSmartDegen: 1 });
+      const gmgnMap = new Map(gmgnPools.map(p => [p.address.toLowerCase(), p]));
+
+      let scored = 0;
+      for (const p of eligible) {
+        const gmgn = gmgnMap.get(p.base?.mint?.toLowerCase());
+        if (gmgn) {
+          p.gmgn_smart_money_score = getSmartMoneyScore(gmgn);
+          p.gmgn_smart_degen_count = gmgn.smart_degen_count;
+          p.gmgn_renowned_count = gmgn.renowned_count;
+          p.gmgn_bundler_rate = gmgn.bundler_rate;
+          p.gmgn_volume_1h = gmgn.volume_1h;
+          p.gmgn_rug_ratio = gmgn.rug_ratio;
+          scored++;
+        }
+      }
+      log("screening", `GMGN Hive Mind: enriched ${scored}/${eligible.length} pools with smart money signals`);
+    } catch (e) {
+      log("gmgn", `Hive Mind enrichment failed: ${e.message}`);
+    }
+  }
   }
 
   // Layer 6: Mark best bin step (highest TVL for same token pair)

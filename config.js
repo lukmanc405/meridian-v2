@@ -47,6 +47,7 @@ export const config = {
     maxTokenAgeHours:   u.maxTokenAgeHours   ?? null, // null = no maximum
     athFilterPct:       u.athFilterPct       ?? null, // e.g. -20 = only deploy if price is >= 20% below ATH
     minVol5Min:         u.minVol5Min         ?? 20_000, // Layer 5: min 5min volume in USD
+    useGmgnHiveMind:   u.useGmgnHiveMind   ?? true,  // NEW: enrich with GMGN smart money signals
   },
 
   // ─── Position Management ────────────────
