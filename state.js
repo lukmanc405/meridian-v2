@@ -151,6 +151,18 @@ export function minutesOutOfRange(position_address) {
 }
 
 /**
+ * How many minutes has a position been open (since deployed)?
+ * Used for maxHoldMinutes exit (Dioderen12-style quick exit).
+ */
+export function minutesSinceDeployed(position_address) {
+  const state = load();
+  const pos = state.positions[position_address];
+  if (!pos || !pos.deployed_at) return 0;
+  const ms = Date.now() - new Date(pos.deployed_at).getTime();
+  return Math.floor(ms / 60000);
+}
+
+/**
  * Record a fee claim event.
  */
 export function recordClaim(position_address, fees_usd) {

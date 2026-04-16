@@ -73,6 +73,8 @@ export const config = {
     pnlSanityMaxDiffPct:   u.pnlSanityMaxDiffPct   ?? 5,    // max allowed diff between reported and derived pnl % before ignoring a tick
     // SOL mode — positions, PnL, and balances reported in SOL instead of USD
     solMode:               u.solMode               ?? false,
+    // Dioderen12-style quick exit
+    maxHoldMinutes:        u.maxHoldMinutes        ?? null,  // null = no time limit, 15 = exit after 15 min
   },
 
   // ─── Strategy Mapping ───────────────────

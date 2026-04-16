@@ -147,6 +147,16 @@ export async function getTopCandidates({ limit = 10 } = {}) {
         pushFilteredReason(filteredOut, p, "token age > 1 year");
         return false;
       }
+      // Dioderen12-style: Min token age filter (avoid brand new tokens)
+      if (config.screening.minTokenAgeHours && p.token_age_hours != null && p.token_age_hours < config.screening.minTokenAgeHours) {
+        pushFilteredReason(filteredOut, p, `token age ${p.token_age_hours}h < min ${config.screening.minTokenAgeHours}h`);
+        return false;
+      }
+      // Dioderen12-style: Max token age filter (avoid old/dead pools)
+      if (config.screening.maxTokenAgeHours && p.token_age_hours != null && p.token_age_hours > config.screening.maxTokenAgeHours) {
+        pushFilteredReason(filteredOut, p, `token age ${p.token_age_hours}h > max ${config.screening.maxTokenAgeHours}h`);
+        return false;
+      }
       // Layer 5: Volume 5min < $20,000 → skip
       if (config.screening.minVol5Min && p.volume_5min != null && p.volume_5min < config.screening.minVol5Min) {
         pushFilteredReason(filteredOut, p, `volume_5min ${p.volume_5min} < $${config.screening.minVol5Min}`);

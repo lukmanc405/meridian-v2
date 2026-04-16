@@ -290,6 +290,11 @@ export async function runManagementCycle({ silent = false } = {}) {
         actionMap.set(p.position, { action: "CLOSE", rule: 6, reason: "position expired (48h+ no fee)" });
         continue;
       }
+      // Dioderen12-style: Max hold time exceeded — force close (e.g. 15 min fresh pool hunter)
+      if (config.management.maxHoldMinutes && (p.age_minutes ?? 0) >= config.management.maxHoldMinutes) {
+        actionMap.set(p.position, { action: "CLOSE", rule: 7, reason: `maxHoldMinutes ${config.management.maxHoldMinutes}m exceeded` });
+        continue;
+      }
       // Claim rule
       if ((p.unclaimed_fees_usd ?? 0) >= config.management.minClaimAmount) {
         actionMap.set(p.position, { action: "CLAIM" });
