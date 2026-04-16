@@ -630,7 +630,8 @@ ${candidateBlocks.join("\n\n")}
 
 STEPS:
 1. Pick the best candidate based on narrative quality, smart wallets, and pool metrics.
-2. Choose LP strategy based on market conditions (DATA-DRIVEN from 112 smart wallet analysis):
+2. Call study_top_lpers for the chosen pool — learn from top LPer behavior, hold times, and win rates. This is REQUIRED before deploying.
+3. Choose LP strategy based on market conditions AND what top LPers are doing:
    **HIGH VOLUME ($200K+/5min):** FAST FREQUENCY mode
      → Deploy ${deployAmount} SOL, tight bins (31-50)
      → Hold 20-60 min max
@@ -653,16 +654,16 @@ STEPS:
      → MUST use bid_ask strategy ONLY (ratio_token = 0)
      → Reason: high volatility + wide bins = directional bet, spot exposes to IL
      → Exception: only use spot if you have strong conviction token will pump AND volume_trend is clearly upward
-3. For FAST FREQUENCY: ratio_token = 0.5-0.75 (50-75% token), bins_above = bins_below/2
+4. For FAST FREQUENCY: ratio_token = 0.5-0.75 (50-75% token), bins_above = bins_below/2
    For SLOW COMPOUND: ratio_token = 0.1-0.2 (10-20% token, conservative), wider range
    For BidAsk: ratio_token = 0 (all SOL), bins_above = 0
-4. EXIT RULES (non-negotiable):
+5. EXIT RULES (non-negotiable):
    - FAST FREQUENCY: PnL > +5% OR IL > -8% → exit immediately. Max hold 2h.
    - SLOW COMPOUND: PnL > +15% OR IL > -10% → exit. NEVER exit before 4h.
    - BidAsk: PnL > +5% OR price exits range → exit. Min hold 1h.
    - CRITICAL: Never use 70+ bins. 31-50 bins outperform every time.
-5. Deposit: ${deployAmount} SOL per position. Use exactly this amount — do not adjust.
-5. Report in this exact format (no tables, no extra sections):
+6. Deposit: ${deployAmount} SOL per position. Use exactly this amount — do not adjust.
+7. Report in this exact format (no tables, no extra sections):
    🚀 DEPLOYED
 
    <pool name>
@@ -695,7 +696,7 @@ STEPS:
 
    WHY THIS WON
    <2-4 concise sentences on why this pool won and why the chosen strategy fits>
-4. If no pool qualifies, report in this exact format instead:
+8. If no pool qualifies, report in this exact format instead:
    ⛔ NO DEPLOY
 
    Cycle finished with no valid entry.

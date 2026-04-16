@@ -1,7 +1,7 @@
 {
-  "screeningModel": "openai/gpt-4o-mini",
-  "managementModel": "openai/gpt-4o-mini",
-  "generalModel": "openai/gpt-4o-mini",
+  "screeningModel": "moonshotai/kimi-k2.5",
+  "managementModel": "moonshotai/kimi-k2.5",
+  "generalModel": "moonshotai/kimi-k2.5",
   "managementIntervalMin": 10,
   "screeningIntervalMin": 30,
   "deployAmountSol": 2.5,
