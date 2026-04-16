@@ -1,9 +1,9 @@
 {
-  "screeningModel": "deepseek/deepseek-v3",
+  "screeningModel": "deepseek/deepseek-chat",
   "screeningFallbackModel": "openai/gpt-4o",
-  "managementModel": "deepseek/deepseek-v3",
+  "managementModel": "deepseek/deepseek-chat",
   "managementFallbackModel": "openai/gpt-4o",
-  "generalModel": "deepseek/deepseek-v3",
+  "generalModel": "deepseek/deepseek-chat",
   "generalFallbackModel": "openai/gpt-4o",
   "managementIntervalMin": 3,
   "screeningIntervalMin": 45,

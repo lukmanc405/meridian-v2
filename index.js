@@ -442,6 +442,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
       log("cron", `Screening skipped — insufficient SOL (${preBalance.sol.toFixed(3)} < ${minRequired} needed for deploy + gas)`);
       screenReport = `Screening skipped — insufficient SOL (${preBalance.sol.toFixed(3)} < ${minRequired} needed for deploy + gas).`;
       _screeningBusy = false;
+      clearTimeout(screenTimeoutHandle);
       return screenReport;
     }
   } catch (e) {
@@ -476,19 +477,27 @@ export async function runScreeningCycle({ silent = false } = {}) {
     const allCandidates = [];
     for (const pool of candidates) {
       const mint = pool.base?.mint;
-      const [smartWallets, narrative, tokenInfo] = await Promise.allSettled([
+      const [smartWallets, narrative, tokenInfo, activeBinResult] = await Promise.allSettled([
         checkSmartWalletsOnPool({ pool_address: pool.pool }),
         mint ? getTokenNarrative({ mint }) : Promise.resolve(null),
         mint ? getTokenInfo({ query: mint }) : Promise.resolve(null),
+        getActiveBin({ pool_address: pool.pool }),
       ]);
       const tokenInfoResult = tokenInfo.status === "fulfilled" ? tokenInfo.value?.results?.[0] : null;
+      const activeBin = activeBinResult.status === "fulfilled" ? activeBinResult.value?.binId : null;
       allCandidates.push({
         pool,
         sw: smartWallets.status === "fulfilled" ? smartWallets.value : null,
         n: narrative.status === "fulfilled" ? narrative.value : null,
         ti: tokenInfoResult,
+        activeBin,
         mem: recallForPool(pool.pool),
       });
+      // Compute bins_below using dynamic formula (yunus-0x style)
+      const volatility = pool.volatility ?? 0;
+      const rawBinsBelow = Math.round(35 + (volatility / 5) * 55);
+      const binsBelow = Math.max(35, Math.min(90, rawBinsBelow));
+      log("screening", `${pool.name}: volatility=${volatility} → bins_below=${binsBelow} (formula: 35 + vol/5*55, clamped [35,90])`);
       // Stage signals for Darwinian weighting
       const stagedSignals = {
         organic_score: pool.organic_score,
@@ -500,7 +509,7 @@ export async function runScreeningCycle({ silent = false } = {}) {
         narrative_quality: narrative.status === "fulfilled" ? 1 : 0,
         study_win_rate: null,
         hive_consensus: null,
-        volatility: pool.volatility,
+        volatility: volatility,
         ath_proximity: pool.price_vs_ath_pct,
         volume_trend: null,
         okx_signal_present: (pool.smart_money_buy || pool.kol_in_clusters) ? 1 : 0,
@@ -546,23 +555,19 @@ export async function runScreeningCycle({ silent = false } = {}) {
       screenReport = combinedExamples
         ? `No candidates available.\nFiltered examples:\n${combinedExamples}`
         : `No candidates available (all filtered by launchpad / holder-quality rules).`;
+      _screeningBusy = false;
+      clearTimeout(screenTimeoutHandle);
       return screenReport;
     }
 
-    // Pre-fetch active_bin for all passing candidates in parallel
-    const activeBinResults = await Promise.allSettled(
-      passing.map(({ pool }) => getActiveBin({ pool_address: pool.pool }))
-    );
-
     // Build compact candidate blocks
-    const candidateBlocks = passing.map(({ pool, sw, n, ti, mem }, i) => {
+    const candidateBlocks = passing.map(({ pool, sw, n, ti, activeBin, mem }, i) => {
       const botPct = ti?.audit?.bot_holders_pct ?? "?";
       const top10Pct = ti?.audit?.top_holders_pct ?? "?";
       const feesSol = ti?.global_fees_sol ?? "?";
       const launchpad = ti?.launchpad ?? null;
       const priceChange = ti?.stats_1h?.price_change;
       const netBuyers = ti?.stats_1h?.net_buyers;
-      const activeBin = activeBinResults[i]?.status === "fulfilled" ? activeBinResults[i].value?.binId : null;
 
       // OKX signals
       const okxParts = [
@@ -635,56 +640,21 @@ ${candidateBlocks.join("\n\n")}
 
 STEPS:
 1. Pick the best candidate based on narrative quality, smart wallets, and pool metrics.
-2. Call study_top_lpers for the chosen pool — learn from top LPer behavior, hold times, and win rates. This is REQUIRED before deploying.
-3. Choose LP strategy based on market conditions AND what top LPers are doing:
-   **HIGH VOLUME ($200K+/5min):** FAST FREQUENCY mode
-     → Deploy ${deployAmount} SOL, tight bins (31-50)
-     → Hold 20-60 min max
-     → Exit after 1-2 fee captures, re-enter new opportunity
-     ⚠️ IF volatility > 3.0 AND bin_step >= 80 → FORCE bid_ask instead (directional risk!)
-   
-   **STEADY VOLUME ($50K-$200K/5min):** SLOW COMPOUND mode
-     → Deploy 1-2 SOL, wider bins (50+)
-     → Hold 4-24 hours MINIMUM
-     → Let fees compound
-     → Exit when IL > -10% or PnL > +15%
-     ⚠️ IF volatility > 3.0 → use bid_ask or very tight spot (ratio_token <= 0.2)
-   
-   **LOW VOLUME (<$50K/5min):** BidAsk only
-     → Deploy ${deployAmount} SOL, tiny bins (31-40)
-     → Hold 1-4 hours
-     → Target fee capture only
-   
-   **HIGH VOLATILITY RULE:** If volatility > 3.0 with bin_step >= 80:
-     → MUST use bid_ask strategy ONLY (ratio_token = 0)
-     → Reason: high volatility + wide bins = directional bet, spot exposes to IL
-     → Exception: only use spot if you have strong conviction token will pump AND volume_trend is clearly upward
-4. For FAST FREQUENCY: ratio_token = 0.5-0.75 (50-75% token), bins_above = bins_below/2
-   For SLOW COMPOUND: ratio_token = 0.1-0.2 (10-20% token, conservative), wider range
-   For BidAsk: ratio_token = 0 (all SOL), bins_above = 0
-5. EXIT RULES (non-negotiable):
-   - FAST FREQUENCY: PnL > +5% OR IL > -8% → exit immediately. Max hold 2h.
-   - SLOW COMPOUND: PnL > +15% OR IL > -10% → exit. NEVER exit before 4h.
-   - BidAsk: PnL > +5% OR price exits range → exit. Min hold 1h.
-   - CRITICAL: Never use 70+ bins. 31-50 bins outperform every time.
-6. DEPLOY CALL — You MUST include amount_y in deploy_position tool call:
-   - Example: deploy_position({ pool_address: "...", amount_y: 2, strategy: "bid_ask", bins_below: 35 })
-   - NEVER call deploy_position without amount_y. This is the most critical parameter.
-   - Deposit: ${deployAmount} SOL per position. Use exactly this amount — do not adjust.
-7. Report in this exact format (no tables, no extra sections):
+2. Call deploy_position (active_bin is pre-fetched above — no need to call get_active_bin).
+   bins_below = round(35 + (volatility/5)*55) clamped to [35,90].
+3. Report in this exact format (no tables, no extra sections):
    🚀 DEPLOYED
 
    <pool name>
    <pool address>
 
-   ◎ <deploy amount> SOL | <lp_strategy> | bin <active_bin> | ratio <ratio>
+   ◎ <deploy amount> SOL | <strategy> | bin <active_bin>
    Range: <minPrice> → <maxPrice>
    Downside buffer: <negative %>
 
    MARKET
    Fee/TVL: <x>%
    Volume: $<x>
-   Volume 5min: $<x>
    TVL: $<x>
    Volatility: <x>
    Organic: <x>
@@ -703,8 +673,8 @@ STEPS:
    <If OKX enrichment is missing, write exactly: OKX: unavailable>
 
    WHY THIS WON
-   <2-4 sentences. Ground each claim in SPECIFIC data points from above (e.g. "Fee/TVL 0.5% exceeds our 0.3% threshold", "Top10 at 15% shows healthy distribution", "2 smart wallets confirm smart money interest", "Bots at 18% is acceptable given fees paid 627 SOL"). Link strategy choice to data (e.g. "spot chosen because volatility 0.8 < 3.0 threshold", "wide range justified by mature pool age 1129h"). Be precise, not vague.>
-8. If no pool qualifies, report in this exact format instead:
+   <2-4 concise sentences on why this pool won, key risks, and why it still beat the alternatives>
+4. If no pool qualifies, report in this exact format instead:
    ⛔ NO DEPLOY
 
    Cycle finished with no valid entry.
@@ -713,7 +683,7 @@ STEPS:
    <name or none>
 
    WHY SKIPPED
-   <2-4 sentences. List specific failing metrics (e.g. "Fee/TVL 0.1% below our 0.3% minimum", "Top10 holders at 72% signals concentration risk", "volume $2K below $5K threshold", "no smart money presence"). Be precise about which threshold failed and by how much.>
+   <2-4 concise sentences explaining why nothing was good enough>
 
    REJECTED
    <short flat list of top candidate names and why they were skipped>
