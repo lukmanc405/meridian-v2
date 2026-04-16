@@ -24,6 +24,10 @@
       "wins": 3,
       "total": 3
     },
+    "8": {
+      "wins": 1,
+      "total": 1
+    },
     "9": {
       "wins": 2,
       "total": 2
@@ -103,8 +107,8 @@
       "total": 2
     },
     "60": {
-      "wins": 4,
-      "total": 4
+      "wins": 5,
+      "total": 5
     },
     "70": {
       "wins": 4,
@@ -125,8 +129,8 @@
   },
   "byFeeYield": {
     "0": {
-      "wins": 39,
-      "total": 39
+      "wins": 40,
+      "total": 40
     },
     "5": {
       "wins": 7,
@@ -635,6 +639,15 @@
       "tirPercent": 100,
       "feeYield": 0,
       "timestamp": "2026-04-16T07:20:13.765Z"
+    },
+    {
+      "pair": "unc-SOL",
+      "poolAddress": "gAyCDR69Pj9WfHXtqGbSRomGV8gYef1BWYh87bmgaYN",
+      "pnlPct": 0.3,
+      "age": 8,
+      "tirPercent": 62.5,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T08:50:28.041Z"
     }
   ]
 }
