@@ -1,7 +1,7 @@
 {
-  "screeningModel": "qwen/qwen-plus",
-  "managementModel": "qwen/qwen-plus",
-  "generalModel": "qwen/qwen-plus",
+  "screeningModel": "anthropic/claude-sonnet-4-5",
+  "managementModel": "anthropic/claude-sonnet-4-5",
+  "generalModel": "anthropic/claude-sonnet-4-5",
   "managementIntervalMin": 3,
   "screeningIntervalMin": 45,
   "deployAmountSol": 2,
