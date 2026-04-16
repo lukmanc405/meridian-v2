@@ -1,7 +1,7 @@
 {
-  "screeningModel": "moonshotai/kimi-k2.5",
-  "managementModel": "moonshotai/kimi-k2.5",
-  "generalModel": "moonshotai/kimi-k2.5",
+  "screeningModel": "qwen/qwen-plus",
+  "managementModel": "qwen/qwen-plus",
+  "generalModel": "qwen/qwen-plus",
   "managementIntervalMin": 1,
   "screeningIntervalMin": 15,
   "deployAmountSol": 2,
