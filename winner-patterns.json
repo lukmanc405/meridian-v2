@@ -57,12 +57,12 @@
       "total": 5
     },
     "17": {
-      "wins": 2,
-      "total": 2
+      "wins": 5,
+      "total": 5
     },
     "18": {
-      "wins": 1,
-      "total": 1
+      "wins": 2,
+      "total": 2
     },
     "19": {
       "wins": 1,
@@ -81,14 +81,14 @@
       "total": 1
     },
     "23": {
-      "wins": 3,
-      "total": 3
+      "wins": 4,
+      "total": 4
     }
   },
   "byTIR": {
     "0": {
-      "wins": 1,
-      "total": 1
+      "wins": 2,
+      "total": 2
     },
     "10": {
       "wins": 2,
@@ -111,30 +111,30 @@
       "total": 5
     },
     "60": {
-      "wins": 6,
-      "total": 6
-    },
-    "70": {
       "wins": 7,
       "total": 7
     },
+    "70": {
+      "wins": 8,
+      "total": 8
+    },
     "80": {
-      "wins": 11,
-      "total": 11
+      "wins": 12,
+      "total": 12
     },
     "90": {
       "wins": 1,
       "total": 1
     },
     "100": {
-      "wins": 20,
-      "total": 20
+      "wins": 21,
+      "total": 21
     }
   },
   "byFeeYield": {
     "0": {
-      "wins": 54,
-      "total": 54
+      "wins": 59,
+      "total": 59
     },
     "5": {
       "wins": 7,
@@ -232,6 +232,13 @@
       "age": 3,
       "tirPercent": 33.3,
       "timestamp": "2026-04-16T13:24:30.240Z"
+    },
+    {
+      "pair": "BURNIE-SOL",
+      "pnlPct": 0.33,
+      "age": 3,
+      "tirPercent": 0,
+      "timestamp": "2026-04-16T17:00:26.001Z"
     }
   ],
   "bigWins": [
@@ -272,51 +279,6 @@
     }
   ],
   "recentWins": [
-    {
-      "pair": "ALONSHOUSE-SOL",
-      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
-      "pnlPct": 1.4,
-      "age": 15,
-      "tirPercent": 100,
-      "feeYield": 0,
-      "timestamp": "2026-04-12T13:26:25.371Z"
-    },
-    {
-      "pair": "ALONSHOUSE-SOL",
-      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
-      "pnlPct": 6.84,
-      "age": 69,
-      "tirPercent": 82.6,
-      "feeYield": 0,
-      "timestamp": "2026-04-12T14:40:17.699Z"
-    },
-    {
-      "pair": "ALONSHOUSE-SOL",
-      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
-      "pnlPct": 0.13,
-      "age": 9,
-      "tirPercent": 11.1,
-      "feeYield": 0,
-      "timestamp": "2026-04-12T15:00:17.340Z"
-    },
-    {
-      "pair": "ALONSHOUSE-SOL",
-      "poolAddress": "8xcnnJPLjMW8tgHxxpUKGLQuRZJt1UNoKJ8YjPJyJdS5",
-      "pnlPct": 3.42,
-      "age": 28,
-      "tirPercent": 75,
-      "feeYield": 0,
-      "timestamp": "2026-04-12T15:50:17.782Z"
-    },
-    {
-      "pair": "ALONSHOUSE-SOL",
-      "poolAddress": "6uXk5AJjhwRiAjG9XHiLtyT4PDHfEdEkB7RSQZpHt8Jh",
-      "pnlPct": 0.03,
-      "age": 68,
-      "tirPercent": 100,
-      "feeYield": 0,
-      "timestamp": "2026-04-12T17:18:43.919Z"
-    },
     {
       "pair": "ALONSHOUSE-SOL",
       "poolAddress": "A3Jcv2FUambPeagJp6UQgAWbaXVyPMNRV9HbComTa4cP",
@@ -721,6 +683,51 @@
       "tirPercent": 40,
       "feeYield": 0,
       "timestamp": "2026-04-16T15:18:12.523Z"
+    },
+    {
+      "pair": "BURNIE-SOL",
+      "poolAddress": "6Q3k9uLd3kbEPZV37P4uKjXUHrhZPEK85P62QTNAj49e",
+      "pnlPct": 0.33,
+      "age": 3,
+      "tirPercent": 0,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T17:00:26.001Z"
+    },
+    {
+      "pair": "BURNIE-SOL",
+      "poolAddress": "uQFKuMm3mJhd8ZpYgGLqFCvtLTpEb6TBWdHYryaEzKV",
+      "pnlPct": 0.66,
+      "age": 11,
+      "tirPercent": 72.7,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T17:26:13.905Z"
+    },
+    {
+      "pair": "BURNIE-SOL",
+      "poolAddress": "uQFKuMm3mJhd8ZpYgGLqFCvtLTpEb6TBWdHYryaEzKV",
+      "pnlPct": 0.79,
+      "age": 18,
+      "tirPercent": 83.3,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T17:56:45.001Z"
+    },
+    {
+      "pair": "SCUBA-SOL",
+      "poolAddress": "4vwaaZZSVUwbN257rJZnGx3ypPq1UPrYAB5DLAEDzotQ",
+      "pnlPct": 1.14,
+      "age": 62,
+      "tirPercent": 100,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T18:06:23.560Z"
+    },
+    {
+      "pair": "LOL-SOL",
+      "poolAddress": "EsaeQmKsYpFbkKjof2bJgpLdVFCCt14WW5RUPDUkJQE1",
+      "pnlPct": 0.11,
+      "age": 8,
+      "tirPercent": 62.5,
+      "feeYield": 0,
+      "timestamp": "2026-04-16T23:12:14.058Z"
     }
   ]
 }
