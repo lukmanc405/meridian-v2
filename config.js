@@ -91,6 +91,16 @@ export const config = {
     },
   },
 
+  // ─── Autoresearch ───────────────────────
+  autoresearch: {
+    enabled:            u.autoresearch?.enabled            ?? false,
+    minClosesPerTrial:  u.autoresearch?.minClosesPerTrial  ?? 7,
+    minAttributedLosses: u.autoresearch?.minAttributedLosses ?? 3,
+    cooldownAfterTrial:  u.autoresearch?.cooldownAfterTrial  ?? 5,
+    maxConsecutive:     u.autoresearch?.maxConsecutive     ?? 2,
+    llmModel:           u.autoresearch?.llmModel           ?? "google/gemini-3-flash-preview",
+  },
+
   // ─── Scheduling ─────────────────────────
   schedule: {
     managementIntervalMin:  u.managementIntervalMin  ?? 10,
