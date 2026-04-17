@@ -55,7 +55,7 @@
     "minAttributedLosses": 3,
     "cooldownAfterTrial": 5,
     "maxConsecutive": 2,
-    "llmModel": "z-ai/glm-5.1"
+    "llmModel": "google/gemini-3-flash-preview"
   },
   "_lastAgentTune": "2026-04-16T04:10:52.515Z"
 }

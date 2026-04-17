@@ -1,5 +1,9 @@
 {
   "byHour": {
+    "0": {
+      "wins": 1,
+      "total": 1
+    },
     "2": {
       "wins": 2,
       "total": 2
@@ -107,8 +111,8 @@
       "total": 3
     },
     "50": {
-      "wins": 5,
-      "total": 5
+      "wins": 6,
+      "total": 6
     },
     "60": {
       "wins": 7,
@@ -133,8 +137,8 @@
   },
   "byFeeYield": {
     "0": {
-      "wins": 59,
-      "total": 59
+      "wins": 60,
+      "total": 60
     },
     "5": {
       "wins": 7,
@@ -279,15 +283,6 @@
     }
   ],
   "recentWins": [
-    {
-      "pair": "ALONSHOUSE-SOL",
-      "poolAddress": "A3Jcv2FUambPeagJp6UQgAWbaXVyPMNRV9HbComTa4cP",
-      "pnlPct": 1.17,
-      "age": 19,
-      "tirPercent": 26.3,
-      "feeYield": 0,
-      "timestamp": "2026-04-12T21:20:17.040Z"
-    },
     {
       "pair": "BULL-SOL",
       "poolAddress": "7t4rFkukdTSEryPTdv2zyAooK55Y6bePDN1NSBnKKdss",
@@ -728,6 +723,15 @@
       "tirPercent": 62.5,
       "feeYield": 0,
       "timestamp": "2026-04-16T23:12:14.058Z"
+    },
+    {
+      "pair": "Deployr-SOL",
+      "poolAddress": "CTAcKsfrnAnAmjiGfeZhL7EXvZuo4PQ2ifeC42w1UBAF",
+      "pnlPct": 0.16,
+      "age": 7,
+      "tirPercent": 57.1,
+      "feeYield": 0,
+      "timestamp": "2026-04-17T00:53:27.376Z"
     }
   ]
 }
