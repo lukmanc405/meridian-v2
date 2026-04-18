@@ -293,9 +293,9 @@ export async function getTopCandidates({ limit = 10 } = {}) {
       const before = eligible.length;
       const filtered = eligible.filter((p) => {
         // High volatility → skip (price too unstable, stop loss likely)
-        if (p.volatility != null && p.volatility > 4) {
+        if (p.volatility != null && p.volatility > 6) {
           log("screening", `Filtered ${p.name} — Evil Panda volatility ${p.volatility} > 6`);
-          pushFilteredReason(filteredOut, p, `Evil Panda volatility ${p.volatility} > 4 max`);
+          pushFilteredReason(filteredOut, p, `Evil Panda volatility ${p.volatility} > 6 max`);
           return false;
         }
         // If we have Evil Panda data and entry is not OK → hard skip

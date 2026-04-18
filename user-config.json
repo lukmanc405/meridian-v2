@@ -41,7 +41,7 @@
   "trailingTriggerPct": 5,
   "trailingDropPct": 4,
   "strategy": "spot",
-  "activeStrategy": "evil_panda",
+  "activeStrategy": "spot",
   "evilPandaMinTokenVolume24h": 200000,
   "evilPandaMinMcap": 200000,
   "evilPandaPriceRangePct": 80,
