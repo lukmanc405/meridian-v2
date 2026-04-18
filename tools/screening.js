@@ -294,7 +294,7 @@ export async function getTopCandidates({ limit = 10 } = {}) {
       const filtered = eligible.filter((p) => {
         // High volatility → skip (price too unstable, stop loss likely)
         if (p.volatility != null && p.volatility > 4) {
-          log("screening", `Filtered ${p.name} — Evil Panda volatility ${p.volatility} > 4`);
+          log("screening", `Filtered ${p.name} — Evil Panda volatility ${p.volatility} > 6`);
           pushFilteredReason(filteredOut, p, `Evil Panda volatility ${p.volatility} > 4 max`);
           return false;
         }
@@ -360,8 +360,8 @@ export async function getTopCandidates({ limit = 10 } = {}) {
   }
 
   // Max volatility filter — skip extreme volatility pools (high vol = price dumps fast, stop loss hits)
-  const MAX_VOLATILITY = 4.0;
-  const MIN_VOLATILITY = 1.5; // avoid dead/stable coins
+  const MAX_VOLATILITY = 6.0;
+  const MIN_VOLATILITY = 1.0; // avoid dead/stable coins
   const beforeVol = eligible.length;
   const filteredVol = eligible.filter((p) => {
     if (p.volatility != null && p.volatility > MAX_VOLATILITY) {
