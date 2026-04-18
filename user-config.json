@@ -14,7 +14,7 @@
   "gasReserve": 0.1,
   "minSolToOpen": 1.5,
   "maxPositions": 2,
-  "outOfRangeWaitMinutes": 3,
+  "outOfRangeWaitMinutes": 5,
   "maxHoldMinutes": 180,
   "stopLossPct": -5,
   "takeProfitFeePct": 7,
@@ -23,7 +23,7 @@
   "maxTvl": 80000,
   "minVolume": 5000,
   "maxVolume": 150000,
-  "minOrganic": 65,
+  "minOrganic": 75,
   "minHolders": 500,
   "minMcap": 150000,
   "maxMcap": 7500000,
@@ -42,10 +42,19 @@
   "trailingDropPct": 4,
   "strategy": "spot",
   "activeStrategy": "evil_panda",
-  "evilPandaMinTokenVolume24h": 750000,
+  "evilPandaMinTokenVolume24h": 200000,
   "evilPandaMinMcap": 200000,
   "evilPandaPriceRangePct": 80,
   "telegramChatId": "630703015",
+  "blacklist": [
+    "AZQHL6CQFZoKonM5ZpQQxdg71bhEf2bhRMcB5uhFo5ka",
+    "CSp21LA8uzJGLAVJ64UzGNLqnfzEx6DycXvgDZyAhGib",
+    "5JMUaDftZS2HnL5fxN9VxGgMG7CVzAp6NVxCrDNQkxmD",
+    "F5bLzDAhcnXnaXSX7dGP2yLU3G6NC56Ao5W9EjJX3Be8",
+    "6rsvCUnKvKB2Utt1BnkqdUebuii4cQkLRx8qgh5Vyy8j",
+    "CTAcKsfrnAnAmjiGfeZhL7EXvZuo4PQ2ifeC42w1UBAF",
+    "F1WdKXnZSTsS6ShGZi6ptAzcMAWRV6z95xFPtQxwMWCg"
+  ],
   "darwin": {
     "enabled": true
   },
@@ -57,5 +66,5 @@
     "maxConsecutive": 2,
     "llmModel": "google/gemini-3-flash-preview"
   },
-  "_lastAgentTune": "2026-04-16T04:10:52.515Z"
+  "_lastAgentTune": "2026-04-17T06:42:33.369Z"
 }

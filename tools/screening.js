@@ -2,7 +2,7 @@ import { config } from "../config.js";
 import { isBlacklisted } from "../token-blacklist.js";
 import { isDevBlocked, getBlockedDevs } from "../dev-blocklist.js";
 import { log } from "../logger.js";
-import { isBaseMintOnCooldown, isPoolOnCooldown } from "../pool-memory.js";
+import { isBaseMintOnCooldown, isPoolOnCooldown, hasTooManyRecentDeploys, wasDeployedRecently } from "../pool-memory.js";
 import { getTrendingPools, getSmartMoneyScore } from "./gmgn.js";
 
 const DATAPI_JUP = "https://datapi.jup.ag/v1";
@@ -136,6 +136,16 @@ export async function getTopCandidates({ limit = 10 } = {}) {
       if (isPoolOnCooldown(p.pool)) {
         log("screening", `Filtered cooldown pool ${p.name} (${p.pool.slice(0, 8)})`);
         pushFilteredReason(filteredOut, p, "pool cooldown active");
+        return false;
+      }
+      if (hasTooManyRecentDeploys(p.pool, 2, 48)) {
+        log("screening", `Filtered repeat pool ${p.name} — 2+ deploys in 48h`);
+        pushFilteredReason(filteredOut, p, "too many recent deploys to this pool");
+        return false;
+      }
+      if (wasDeployedRecently(p.pool, 2)) {
+        log("screening", `Filtered recently-deployed pool ${p.name} — deployed within 2h`);
+        pushFilteredReason(filteredOut, p, "pool deployed within last 2h");
         return false;
       }
       if (isBaseMintOnCooldown(p.base?.mint)) {
@@ -278,6 +288,28 @@ export async function getTopCandidates({ limit = 10 } = {}) {
     eligible.splice(0, eligible.length, ...filtered);
     if (eligible.length < before) log("dev_blocklist", `Filtered ${before - eligible.length} pool(s) via OKX creator check`);
 
+    // Evil Panda entry filter — HARD SKIP if entry signal not confirmed OR volatility too high
+    if (config.strategy?.activeStrategy === "evil_panda") {
+      const before = eligible.length;
+      const filtered = eligible.filter((p) => {
+        // High volatility → skip (price too unstable, stop loss likely)
+        if (p.volatility != null && p.volatility > 4) {
+          log("screening", `Filtered ${p.name} — Evil Panda volatility ${p.volatility} > 4`);
+          pushFilteredReason(filteredOut, p, `Evil Panda volatility ${p.volatility} > 4 max`);
+          return false;
+        }
+        // If we have Evil Panda data and entry is not OK → hard skip
+        if (p.evil_panda_entry_ok === false) {
+          log("screening", `Filtered ${p.name} — Evil Panda entry signal NOT confirmed (supertrend=red or price below)`);
+          pushFilteredReason(filteredOut, p, "Evil Panda entry not confirmed: supertrend not green or price below");
+          return false;
+        }
+        return true;
+      });
+      eligible.splice(0, eligible.length, ...filtered);
+      if (eligible.length < before) log("screening", `Evil Panda entry filter removed ${before - eligible.length} pool(s)`);
+    }
+
   // NEW: Hive Mind Layer — enrich with GMGN smart money signals
   if (eligible.length > 0 && config.screening.useGmgnHiveMind) {
     try {
@@ -326,6 +358,20 @@ export async function getTopCandidates({ limit = 10 } = {}) {
       p.bins_below = 69; // fallback default
     }
   }
+
+  // Max volatility filter — skip extreme volatility pools (high vol = price dumps fast, stop loss hits)
+  const MAX_VOLATILITY = 4.0;
+  const beforeVol = eligible.length;
+  const filteredVol = eligible.filter((p) => {
+    if (p.volatility != null && p.volatility > MAX_VOLATILITY) {
+      log("screening", `Filtered high-volatility ${p.name} — vol ${p.volatility} > ${MAX_VOLATILITY}`);
+      pushFilteredReason(filteredOut, p, `volatility ${p.volatility} > ${MAX_VOLATILITY} max`);
+      return false;
+    }
+    return true;
+  });
+  eligible = filteredVol;
+  if (eligible.length < beforeVol) log("screening", `Volatility filter removed ${beforeVol - eligible.length} pool(s)`);
 
   return {
     candidates: eligible,

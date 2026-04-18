@@ -10,6 +10,7 @@
  * @returns {string} - Complete system prompt
  */
 import { config } from "./config.js";
+import { log } from "./logger.js";
 
 export function buildSystemPrompt(agentType, portfolio, positions, stateSummary = null, lessons = null, perfSummary = null) {
   const s = config.screening;
@@ -205,4 +206,65 @@ PARALLEL FETCH RULE: When deploying to a specific pool, call get_pool_detail, ch
   }
 
   return basePrompt + `\nTimestamp: ${new Date().toISOString()}\n`;
+}
+
+// ─── Autoresearch Support (stub implementations) ────────────────────────────
+// These allow autoresearch.js to read/modify prompt sections dynamically.
+
+const _sectionOverrides = new Map();
+
+// Prompt sections for autoresearch attribution:
+// - screener_criteria: SCREENER section (entry rules, screening logic)
+// - manager_logic: MANAGER section (decision tree, close rules)
+// - range_selection: bin range selection logic
+const SECTION_CONTENT = {
+  screener_criteria: `
+SCREENING CYCLE — use get_top_candidates to find candidates, then study each pool:
+- Check fee_active_tvl_ratio, volume, TVL, organic_score, top10 holders, bot holders
+- Use evil_panda entry rules when activeStrategy === "evil_panda"
+- Smart wallets + fees pass → strong signal
+- global_fees_sol < minTokenFeesSol → HARD SKIP
+- top_10_real_holders_pct > 60% → SKIP
+- bins_below from volatility formula: round(35 + (vol/5)*55) clamped [35,90]
+`.trim(),
+
+  manager_logic: `
+MANAGEMENT — Check positions, apply decision tree:
+- If PnL > takeProfitFeePct → close
+- If PnL < stopLossPct → close
+- If OOR UPSIDE + profitable → close
+- If OOR DOWNSIDE for > outOfRangeWaitMinutes → close
+- Evil Panda: only close when PnL positive AND RSI(2)>90 AND (BB upper OR MACD first green)
+- STAY otherwise
+`.trim(),
+
+  range_selection: `
+BIN RANGE SELECTION — Total bins (tighter is better):
+- Low vol (0-1): 25-35 bins
+- Med vol (1-3): 35-50 bins
+- High vol (3-5): 50-60 bins
+- Extreme: 60-69 bins
+Directional split based on price trend:
+- Price downtrend → bins_below = round(total × 0.75)
+- Price uptrend → bins_below = round(total × 0.35)
+- Price flat → bins_below = round(total × 0.55)
+`.trim(),
+};
+
+export function getPromptSectionText(sectionName) {
+  // Check override first
+  if (_sectionOverrides.has(sectionName)) {
+    return _sectionOverrides.get(sectionName);
+  }
+  return SECTION_CONTENT[sectionName] || null;
+}
+
+export function setPromptSectionOverride(sectionName, text) {
+  _sectionOverrides.set(sectionName, text);
+  log("autoresearch", `Override set for section: ${sectionName}`);
+}
+
+export function clearPromptSectionOverride(sectionName) {
+  _sectionOverrides.delete(sectionName);
+  log("autoresearch", `Override cleared for section: ${sectionName}`);
 }

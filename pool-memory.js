@@ -184,6 +184,40 @@ export function isPoolOnCooldown(poolAddress) {
   return new Date(entry.cooldown_until) > new Date();
 }
 
+/**
+ * Check if a pool has been deployed to too many times recently.
+ * Returns true if deploy count in last 48h >= maxDeploys.
+ */
+export function hasTooManyRecentDeploys(poolAddress, maxDeploys = 2, windowHours = 48) {
+  if (!poolAddress) return false;
+  const db = load();
+  const entry = db[poolAddress];
+  if (!entry?.deploys) return false;
+
+  const cutoff = new Date(Date.now() - windowHours * 60 * 60 * 1000);
+  const recentCount = entry.deploys.filter(d => {
+    const deployedAt = d.deployed_at ? new Date(d.deployed_at) : null;
+    return deployedAt && deployedAt > cutoff;
+  }).length;
+
+  return recentCount >= maxDeploys;
+}
+
+/**
+ * Check if a pool was deployed to within the last N hours (same pool re-deploy block).
+ * Returns true if the most recent deploy was within windowHours.
+ */
+export function wasDeployedRecently(poolAddress, windowHours = 24) {
+  if (!poolAddress) return false;
+  const db = load();
+  const entry = db[poolAddress];
+  if (!entry?.last_deployed_at) return false;
+
+  const cutoff = new Date(Date.now() - windowHours * 60 * 60 * 1000);
+  const lastDeploy = new Date(entry.last_deployed_at);
+  return lastDeploy > cutoff;
+}
+
 export function isBaseMintOnCooldown(baseMint) {
   if (!baseMint) return false;
   const db = load();

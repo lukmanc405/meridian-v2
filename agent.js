@@ -165,6 +165,7 @@ export async function agentLoop(goal, maxSteps = config.llm.maxSteps, sessionHis
 
   let emptyStreak = 0;
   for (let step = 0; step < maxSteps; step++) {
+    sawToolCall = false; // reset each step — must make a tool call per step if required
     log("agent", `Step ${step + 1}/${maxSteps}`);
 
     try {

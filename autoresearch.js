@@ -292,10 +292,15 @@ async function analyzeAndGenerate(perfData, lessons, cfg, state) {
   }
 
   const llmModel = cfg.autoresearch?.llmModel ?? getDefaultModelForProvider(getLlmProvider());
+  // Derive provider from model when explicitly set (respects autoresearch.llmModel override)
+  const modelProvider = llmModel.startsWith("google/") ? "google"
+    : llmModel.startsWith("anthropic/") ? "anthropic"
+    : llmModel.startsWith("deepseek/") ? "deepseek"
+    : getLlmProvider();
   let hypothesis, modifiedText;
 
   try {
-    const result = await callLLM(llmModel, worstSection, worstCount, currentText, failureDesc + kbContext);
+    const result = await callLLM(llmModel, worstSection, worstCount, currentText, failureDesc + kbContext, modelProvider);
     hypothesis = result.hypothesis;
     modifiedText = result.modifiedText;
   } catch (e) {
@@ -518,8 +523,7 @@ function logExperimentLesson(experiment, outcome, improvementPct) {
 
 // ─── LLM Call ────────────────────────────────────────────────
 
-async function callLLM(model, sectionName, lossCount, currentText, failureDesc) {
-  const provider = getLlmProvider();
+async function callLLM(model, sectionName, lossCount, currentText, failureDesc, provider) {
 
   const systemMsg = `You optimize prompts for an autonomous LP (Liquidity Provider) trading agent on Meteora/Solana DLMM. The agent uses these prompts as behavioral instructions. Your goal is to make small, surgical edits that reduce losses.
 
@@ -549,28 +553,7 @@ HYPOTHESIS: [one sentence explaining what you're changing and why]
 MODIFIED_TEXT:
 [full section text with your single change applied]`;
 
-  if (provider === "codex") {
-    const content = await runCodexExec(model, `${systemMsg}\n\n${userMsg}`, {
-      cwd: process.cwd(),
-      sandbox: "read-only",
-      skipGitRepoCheck: true,
-      config: {
-        "suppress_unstable_features_warning": "true",
-        "model_reasoning_effort": config.autoresearch?.reasoningEffort ?? "medium",
-      },
-    });
-
-    if (!content) throw new Error("Empty response from Codex CLI");
-
-    const hypothesisMatch = content.match(/HYPOTHESIS:\s*(.+?)(?:\n|$)/i);
-    const modifiedMatch = content.match(/MODIFIED_TEXT:\s*\n([\s\S]+)/i);
-
-    return {
-      hypothesis: hypothesisMatch?.[1]?.trim() || "Targeted modification",
-      modifiedText: modifiedMatch?.[1]?.trim() || null,
-    };
-  }
-
+  // google/anthropic/deepseek etc. all use generic OpenAI-compatible API
   if (provider === "claude") {
     const { runClaudeCli } = await import("./llm-provider.js");
 
@@ -589,8 +572,8 @@ MODIFIED_TEXT:
     };
   }
 
-  const baseURL = getChatCompletionsEndpoint();
-  const apiKey = getProviderApiKey();
+  const baseURL = getChatCompletionsEndpoint(provider);
+  const apiKey = getProviderApiKey(provider);
   if (!apiKey) throw new Error("LLM API key/token not available for autoresearch");
 
   const body = {

@@ -46,6 +46,7 @@ export function getProviderApiKey(provider = getLlmProvider()) {
   if (provider === "claude") {
     throw new Error("Claude provider uses the Claude CLI (OAuth), not direct API key access.");
   }
+  if (provider === "google") return process.env.OPENROUTER_API_KEY || process.env.GOOGLE_API_KEY;
   if (provider === "deepseek") return process.env.DEEPSEEK_API_KEY;
   if (provider === "minimax") return process.env.MINIMAX_API_KEY;
   if (provider === "openrouter") return process.env.OPENROUTER_API_KEY;
@@ -91,6 +92,7 @@ export function getChatCompletionsEndpoint(provider = getLlmProvider()) {
   if (provider === "claude") {
     throw new Error("Claude provider uses the Claude CLI (OAuth), not direct chat completions.");
   }
+  if (provider === "google") return "https://openrouter.ai/api/v1/chat/completions";
   if (provider === "deepseek") return "https://api.deepseek.com/chat/completions";
   if (provider === "minimax") return "https://api.minimax.io/v1/chat/completions";
   if (provider !== "openrouter") {

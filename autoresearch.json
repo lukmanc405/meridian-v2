@@ -1,1 +1,36 @@
-{"active":null,"cooldownRemaining":0,"history":[]}
+{
+  "enabled": false,
+  "experiments": [
+    {
+      "id": "exp_1776394302811",
+      "section": "screener_criteria",
+      "hypothesis": "I am increasing the minimum `bins_below` floor from 35 to 55 to provide a wider safety buffer for `spot` strategies, as recent losses were driven by hitting stop losses or falling out of range on the downside during volatility.",
+      "original_text": "SCREENING CYCLE — use get_top_candidates to find candidates, then study each pool:\n- Check fee_active_tvl_ratio, volume, TVL, organic_score, top10 holders, bot holders\n- Use evil_panda entry rules when activeStrategy === \"evil_panda\"\n- Smart wallets + fees pass → strong signal\n- global_fees_sol < minTokenFeesSol → HARD SKIP\n- top_10_real_holders_pct > 60% → SKIP\n- bins_below from volatility formula: round(35 + (vol/5)*55) clamped [35,90]",
+      "modified_text": "SCREENING CYCLE — use get_top_candidates to find candidates, then study each pool:\n- Check fee_active_tvl_ratio, volume, TVL, organic_score, top10 holders, bot holders\n- Use evil_panda entry rules when activeStrategy === \"evil_panda\"\n- Smart wallets + fees pass → strong signal\n- global_fees_sol < minTokenFeesSol → HARD SKIP\n- top_10_real_holders_pct > 60% → SKIP\n- bins_below from volatility formula: round(35 + (vol/5)*55) clamped [55,90]",
+      "started_at": "2026-04-17T02:51:42.811Z",
+      "started_at_position": 158,
+      "baseline": {
+        "win_rate": 57.1,
+        "avg_pnl_pct": -0.28,
+        "positions": 7
+      },
+      "trial": {
+        "win_rate": 50,
+        "avg_pnl_pct": -0.45,
+        "positions": 12
+      },
+      "status": "inconclusive",
+      "environment_snapshot": {
+        "thresholds_last_evolved": null,
+        "thresholds_positions_at_evolution": 0,
+        "darwin_last_recalc": null,
+        "darwin_recalc_count": 0
+      },
+      "weights_at_start": {}
+    }
+  ],
+  "active": null,
+  "cooldownRemaining": 4,
+  "kept_overrides": {},
+  "history": []
+}
