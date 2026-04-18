@@ -361,11 +361,17 @@ export async function getTopCandidates({ limit = 10 } = {}) {
 
   // Max volatility filter — skip extreme volatility pools (high vol = price dumps fast, stop loss hits)
   const MAX_VOLATILITY = 4.0;
+  const MIN_VOLATILITY = 1.5; // avoid dead/stable coins
   const beforeVol = eligible.length;
   const filteredVol = eligible.filter((p) => {
     if (p.volatility != null && p.volatility > MAX_VOLATILITY) {
       log("screening", `Filtered high-volatility ${p.name} — vol ${p.volatility} > ${MAX_VOLATILITY}`);
       pushFilteredReason(filteredOut, p, `volatility ${p.volatility} > ${MAX_VOLATILITY} max`);
+      return false;
+    }
+    if (p.volatility != null && p.volatility < MIN_VOLATILITY) {
+      log("screening", `Filtered low-volatility ${p.name} — vol ${p.volatility} < ${MIN_VOLATILITY} (dead/stable)`);
+      pushFilteredReason(filteredOut, p, `volatility ${p.volatility} < ${MIN_VOLATILITY} min`);
       return false;
     }
     return true;
